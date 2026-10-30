@@ -87,3 +87,9 @@ python scripts/build_font.py
 - 页面不依赖任何外部 CDN，断网也能完整打开。
 - 图片已压缩为网页尺寸，原始大图仍保留在根目录的素材文件夹里。
 - `scripts/build_images.py` 会清空并重建 `assets/img/works/`，只用于从原始素材重建现有作品，新增作品请用 `prepare_work.py`。
+
+## 部署到 GitHub Pages
+
+将仓库推送到 `main` 分支后，GitHub Actions 会自动发布此静态网站；也可以在 Actions 页面手动运行 `Deploy portfolio to GitHub Pages`。
+
+首次部署前，在仓库的 **Settings → Pages → Build and deployment** 中将 **Source** 设为 **GitHub Actions**。部署完成后，页面地址会显示在该工作流的部署环境中；项目仓库通常使用 `https://<用户名>.github.io/<仓库名>/`。

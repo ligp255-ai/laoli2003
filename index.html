@@ -4,11 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>李贵平 · 设计作品集 2026</title>
-  <meta name="description" content="李贵平，环境设计 2026 届。景观、室内、视觉、文创、AIGC、手绘与模型作品集，共 31 个项目。">
-  <meta name="theme-color" content="#0c0a08">
+  <meta name="description" content="李贵平，环境设计 2026 届。景观、室内、视觉、包装、文创、AIGC、手绘与模型作品集，共 35 个项目。">
+  <meta name="theme-color" content="#f6f5f1">
+  <script>
+    try {
+      var savedTheme = localStorage.getItem("lgp-theme");
+      if (savedTheme === "dark" || savedTheme === "light") document.documentElement.dataset.theme = savedTheme;
+    } catch (error) {}
+  </script>
   <meta property="og:type" content="website">
   <meta property="og:title" content="李贵平 · 设计作品集 2026">
-  <meta property="og:description" content="环境设计 2026 届。景观、室内、视觉、文创、AIGC、手绘与模型，共 31 个项目。">
+  <meta property="og:description" content="环境设计 2026 届。景观、室内、视觉、包装、文创、AIGC、手绘与模型，共 35 个项目。">
   <meta property="og:image" content="assets/img/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -29,73 +35,69 @@
       <span class="topbar-sub">作品集 2026</span>
     </a>
     <nav class="topbar-nav" aria-label="页面导航">
-      <a href="#top">介绍</a>
       <a href="#works">作品</a>
+      <a href="#fields">领域</a>
       <a href="#about">关于</a>
       <a href="#contact">联系</a>
       <a class="topbar-cv" data-profile-href="resume" href="assets/li-guiping-resume.pdf" download>简历</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换到深色模式" aria-pressed="false" title="切换深色模式">
+        <svg class="theme-icon theme-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.4 14.3A8.4 8.4 0 0 1 9.7 3.6a8.5 8.5 0 1 0 10.7 10.7Z"/>
+        </svg>
+        <svg class="theme-icon theme-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2.4v2.1M12 19.5v2.1M2.4 12h2.1M19.5 12h2.1M5.2 5.2l1.5 1.5M17.3 17.3l1.5 1.5M18.8 5.2l-1.5 1.5M6.7 17.3l-1.5 1.5"/>
+        </svg>
+      </button>
     </nav>
   </header>
 
   <main id="main">
     <section class="opening" id="top" aria-labelledby="intro-title">
-      <div class="opening-bg" aria-hidden="true">
-        <img src="assets/img/hero-bg.jpg" alt="" width="1536" height="864" fetchpriority="high" decoding="async">
+      <div class="opening-art" aria-hidden="true">
+        <img src="assets/img/hero-statue.png" alt="" width="1536" height="864" fetchpriority="high" decoding="async">
+        <span class="opening-orbit"></span>
+        <svg class="opening-star star-1" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>
+        <svg class="opening-star star-2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>
+        <svg class="opening-star star-3" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>
       </div>
 
-      <div class="opening-wordmark" aria-hidden="true">LIGUIPING</div>
-
-      <div class="opening-stage">
-        <div class="device">
-          <div class="device-screen">
-            <div class="intro-grid">
-              <div class="intro-main">
-                <div class="intro-id">
-                  <figure class="intro-portrait">
-                    <img data-profile-src="portrait" src="assets/img/portrait.jpg" alt="李贵平的肖像" width="909" height="1211" loading="eager" fetchpriority="high">
-                  </figure>
-                  <div class="intro-id-text">
-                    <h1 id="intro-title" data-profile="name">李贵平</h1>
-                    <p class="intro-role" data-profile="role">环境设计 · 2026 届 · 作品集</p>
-                    <p class="intro-lead" data-profile="intro">做空间、品牌与图像，也做让人愿意停下来看的画面。环境设计 2026 届，可随时到岗。</p>
-                  </div>
-                </div>
-                <p class="intro-bio" data-profile="bio">熟悉从场地分析、方案推演到施工图与效果图表达的完整流程；也持续做品牌、包装与 AIGC 视觉实验。</p>
-                <div class="intro-actions">
-                  <a class="btn" href="#works">查看作品</a>
-                  <a class="intro-resume" data-profile-href="resume" href="assets/li-guiping-resume.pdf" download>简历 PDF</a>
-                </div>
-              </div>
-
-              <div class="intro-side">
-                <dl class="intro-facts">
-                  <div><dt>学校</dt><dd data-profile="school">兰州工商学院</dd></div>
-                  <div><dt>专业</dt><dd data-profile="major">环境设计 · 本科</dd></div>
-                  <div><dt>所在地</dt><dd data-profile="location">甘肃 · 天水</dd></div>
-                  <div><dt>状态</dt><dd data-profile="availability">可随时到岗</dd></div>
-                </dl>
-                <p class="intro-focus"><span>求职方向</span><span data-profile="focus">室内设计 / 景观设计 / 展陈视觉</span></p>
-                <p class="intro-tools">空间 · 视觉 · 手绘 · AIGC</p>
-                <p class="intro-scope" id="intro-scope">31 个项目 · 163 张作品图 · 7 个类别</p>
-                <div class="intro-contact">
-                  <a data-profile-href="email" href="mailto:1945343340@qq.com">写邮件</a>
-                  <a data-profile-href="phone" href="tel:19393185828">打电话</a>
-                </div>
-              </div>
-            </div>
+      <div class="shell opening-inner">
+        <div class="opening-copy">
+          <h1 class="opening-display" id="intro-title">
+            <span class="sr-only">李贵平 · </span>LI<br>GUIPING
+          </h1>
+          <p class="opening-sub">空间 · 视觉 · 图像</p>
+          <span class="opening-rule" aria-hidden="true"></span>
+          <p class="opening-statement">把空间，<br>做成愿意停留的地方。</p>
+          <p class="opening-name"><span data-profile="name">李贵平</span> · <span data-profile="role">环境设计 · 2026 届</span></p>
+          <p class="opening-intro" data-profile="intro">做空间、品牌与图像，也做让人愿意停下来看的画面。</p>
+          <p class="opening-facts">
+            <span data-profile="school">兰州工商学院</span>
+            <span aria-hidden="true">/</span>
+            <span data-profile="major">环境设计 · 本科</span>
+            <span aria-hidden="true">/</span>
+            <span data-profile="location">甘肃 · 天水</span>
+            <span aria-hidden="true">/</span>
+            <span data-profile="availability">可随时到岗</span>
+          </p>
+          <p class="opening-scope" id="intro-scope">35 个项目 · 194 张作品图 · 8 个类别</p>
+          <div class="opening-actions">
+            <a class="opening-link" href="#works">查看作品 <span aria-hidden="true">→</span></a>
+            <a class="opening-link opening-link-2" data-profile-href="resume" href="assets/li-guiping-resume.pdf" download>简历 PDF</a>
           </div>
+        </div>
+
+        <div class="opening-meta" aria-hidden="true">
+          <span class="opening-meta-brand">LIGUIPING</span>
+          <span class="opening-meta-year">2026 ——</span>
         </div>
       </div>
 
-      <a class="opening-pill" href="#works">
-        <span class="pill-text">
-          <strong>查看全部作品</strong>
-          <small>31 个项目 · 7 个类别</small>
-        </span>
-        <span class="pill-arrow" aria-hidden="true">→</span>
+      <a class="opening-scroll" href="#fields">
+        <span class="opening-scroll-line" aria-hidden="true"></span>
+        SCROLL DOWN
       </a>
-
-      <p class="opening-hint" aria-hidden="true">向下滚动</p>
 
       <noscript>
         <p class="noscript">作品列表需要开启 JavaScript。你仍然可以通过 <a href="mailto:1945343340@qq.com">1945343340@qq.com</a> 联系我。</p>
@@ -105,87 +107,184 @@
     <section class="section selected" id="works" aria-labelledby="works-title">
       <div class="shell">
         <div class="section-head">
-          <h2 class="display" id="works-title">精选作品</h2>
-          <p class="section-note">6 组 / 景观 · 室内 · 视觉 · AIGC</p>
+          <div>
+            <h2 class="display" id="works-title">精选作品</h2>
+            <p class="head-en">Selected works</p>
+          </div>
+          <a class="head-link" href="#index">全部 35 个项目 <span aria-hidden="true">→</span></a>
         </div>
-        <div class="runs" id="featured-runs"></div>
+        <div class="selected-grid" id="selected-grid"></div>
+      </div>
+    </section>
+
+    <section class="fields" id="fields" aria-labelledby="fields-title">
+      <div class="shell fields-bar">
+        <div class="fields-intro">
+          <h2 class="fields-title" id="fields-title">设计领域</h2>
+          <p class="head-en">Design fields</p>
+        </div>
+        <div class="fields-grid" id="fields-grid" role="group" aria-label="按设计领域筛选全部作品">
+          <button class="field" type="button" data-cat="景观" aria-pressed="false">
+            <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2.5 18.5h19"/>
+              <path d="M4.5 18.5l4.8-7.2 3.1 4.2 3.2-5.4 4 8.4"/>
+              <circle cx="16.8" cy="6.2" r="1.7"/>
+            </svg>
+            <span class="field-label">景观</span>
+            <span class="field-en">Landscape</span>
+          </button>
+          <button class="field" type="button" data-cat="室内" aria-pressed="false">
+            <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 11V8.2A2.2 2.2 0 0 1 9.2 6h5.6A2.2 2.2 0 0 1 17 8.2V11"/>
+              <path d="M4.8 11h14.4v5.2H4.8z"/>
+              <path d="M7 16.2v3M17 16.2v3"/>
+            </svg>
+            <span class="field-label">室内</span>
+            <span class="field-en">Interior</span>
+          </button>
+          <button class="field" type="button" data-cat="视觉" aria-pressed="false">
+            <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3.5 4.5h12v15h-12z"/>
+              <path d="M8.2 19.5h12.3V7.8"/>
+              <path d="M6.8 9.2h5.4M6.8 12.4h5.4"/>
+            </svg>
+            <span class="field-label">视觉</span>
+            <span class="field-en">Visual</span>
+          </button>
+          <button class="field" type="button" data-cat="包装" aria-pressed="false">
+            <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4.5 6.5h15v13h-15z"/>
+              <path d="M4.5 10.5h15M9.5 6.5v13"/>
+              <path d="M12.4 13.2h4.2M12.4 15.7h2.7"/>
+            </svg>
+            <span class="field-label">包装</span>
+            <span class="field-en">Packaging</span>
+          </button>
+          <button class="field" type="button" data-cat="文创" aria-pressed="false">
+            <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 8.5h16V20H4z"/>
+              <path d="M3.4 4.2h17.2l-1.6 4.3H5z"/>
+              <path d="M12 8.5V20"/>
+            </svg>
+            <span class="field-label">文创</span>
+            <span class="field-en">Cultural</span>
+          </button>
+          <button class="field" type="button" data-cat="AIGC" aria-pressed="false">
+            <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3.2l2.1 6.7 6.7 2.1-6.7 2.1-2.1 6.7-2.1-6.7L3.2 12l6.7-2.1z"/>
+            </svg>
+            <span class="field-label">AIGC</span>
+            <span class="field-en">Generative</span>
+          </button>
+          <button class="field" type="button" data-cat="手绘" aria-pressed="false">
+            <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4.2 19.8l4.1-1 10.4-10.4-3.1-3.1L5.2 15.7z"/>
+              <path d="M14.6 5.3l3.1 3.1"/>
+            </svg>
+            <span class="field-label">手绘</span>
+            <span class="field-en">Drawing</span>
+          </button>
+          <button class="field" type="button" data-cat="模型" aria-pressed="false">
+            <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3.2l8 4.4v9.2L12 21l-8-4.2V7.6z"/>
+              <path d="M12 12l8-4.4M12 12v9M12 12L4 7.6"/>
+            </svg>
+            <span class="field-label">模型</span>
+            <span class="field-en">Model</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section feature" id="feature" aria-labelledby="feature-title">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2 class="display" id="feature-title">代表项目</h2>
+            <p class="head-en">Featured project</p>
+          </div>
+        </div>
+        <div class="feature-layout" id="feature-layout"></div>
       </div>
     </section>
 
     <section class="section index" id="index" aria-labelledby="index-title">
       <div class="shell">
         <div class="section-head">
-          <h2 class="display" id="index-title">全部作品</h2>
-          <p class="section-note" id="index-count">31 个项目</p>
+          <div>
+            <h2 class="display" id="index-title">全部作品</h2>
+            <p class="head-en">All works</p>
+          </div>
+          <p class="section-note" id="index-count">35 个项目</p>
         </div>
-        <div class="filters" id="filters" role="group" aria-label="按方向聚焦作品"></div>
-        <div class="shelf" id="shelf"></div>
+        <div class="filters" id="filters" role="group" aria-label="按方向筛选作品"></div>
+        <div class="works-grid" id="works-grid"></div>
         <p class="sr-only" id="filter-status" aria-live="polite"></p>
       </div>
     </section>
 
-    <section class="section about" id="about" aria-labelledby="about-title">
+    <section class="about" id="about" aria-labelledby="about-title">
       <div class="shell">
-        <h2 class="display" id="about-title">关于</h2>
         <div class="about-grid">
-          <figure class="about-portrait">
-            <div class="portrait-frame">
-              <img data-profile-src="portrait" src="assets/img/portrait.jpg" alt="李贵平的肖像" width="909" height="1211" loading="lazy">
-            </div>
-          </figure>
-          <div class="about-copy">
+          <div class="about-main">
+            <h2 class="display about-title" id="about-title">关于我</h2>
             <p class="about-statement">做空间，也做让人愿意停下来看的画面。</p>
+          </div>
+          <div class="about-body">
             <p class="about-bio">环境设计专业，2026 届。熟悉从场地分析、方案推演到施工图与效果图表达的完整流程；也持续做品牌、包装与 AIGC 视觉实验。比起单一风格，更在意一套方案能不能自圆其说。</p>
             <dl class="skills" id="skills"></dl>
             <dl class="about-meta" id="about-meta"></dl>
-            <a class="text-link" data-profile-href="resume" href="assets/li-guiping-resume.pdf" download>下载简历 PDF</a>
+            <a class="btn" data-profile-href="resume" href="assets/li-guiping-resume.pdf" download>下载简历 PDF</a>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="section gallery" id="gallery" aria-labelledby="gallery-title">
-      <div class="shell">
-        <div class="section-head">
-          <h2 class="display" id="gallery-title">过程</h2>
-          <p class="section-note">12 张 / 手绘与细节</p>
-        </div>
-      </div>
-      <div class="gallery-scroller" id="gallery-scroller" tabindex="0" role="region" aria-label="手绘与细节横向画廊，可左右滚动">
-        <div class="gallery-track" id="gallery-track"></div>
       </div>
     </section>
 
     <section class="section contact" id="contact" aria-labelledby="contact-title">
       <div class="shell">
         <div class="contact-grid">
-          <div class="contact-lead">
+          <div class="contact-main">
             <h2 class="display" id="contact-title">联系</h2>
-            <p class="contact-sentence">如果你在找能把空间、品牌与画面做实的设计师，欢迎来信。</p>
-          </div>
-          <div class="contact-side">
-            <figure class="contact-portrait">
-              <img data-profile-src="portrait" src="assets/img/portrait.jpg" alt="李贵平的肖像" width="909" height="1211" loading="lazy">
-            </figure>
-            <div class="contact-links">
-              <p class="contact-q" data-profile="focus">求职方向：室内 / 景观 / 展陈视觉</p>
-              <a data-profile-href="email" data-profile-text="email" href="mailto:1945343340@qq.com">1945343340@qq.com</a>
-              <a data-profile-href="phone" data-profile-text="phone" href="tel:19393185828">19393185828</a>
-              <p class="contact-meta"><span data-profile="location">甘肃 · 天水</span> / <span data-profile="availability">可随时到岗</span></p>
+            <p class="contact-sentence">如果你在找能把空间、品牌与画面<span class="nb">做实的设计师</span>，欢迎来信。</p>
+            <a class="contact-mail" data-profile-href="email" data-profile-text="email" href="mailto:1945343340@qq.com">1945343340@qq.com</a>
+            <div class="contact-rows">
+              <a data-profile-href="phone" href="tel:19393185828">电话 <span data-profile-text="phone">19393185828</span></a>
+              <p data-profile="location">甘肃 · 天水</p>
+              <p data-profile="availability">可随时到岗</p>
             </div>
           </div>
+          <figure class="contact-media">
+            <img src="assets/img/works/waterfront-park/03.jpg" alt="滨水公园林下路径与水榭效果图" width="1392" height="1130" loading="lazy" decoding="async">
+          </figure>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer" data-wordmark="LI GUIPING" aria-label="页脚">
-    <div class="footer-row">
-      <span>作品集 2026</span>
-      <span>© 2026 <span data-profile="name">李贵平</span></span>
-      <a href="#top">回到顶部</a>
+  <footer class="site-footer" aria-label="页脚">
+    <div class="shell">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <p class="footer-wordmark">LIGUIPING</p>
+          <p class="footer-brand-sub"><span data-profile="name">李贵平</span> · <span data-profile="role">环境设计 · 2026 届</span></p>
+        </div>
+        <p class="footer-line">用设计，探索更多可能。<br>让作品替你说话。</p>
+        <nav class="footer-nav" aria-label="页脚导航">
+          <a href="#works">作品</a>
+          <a href="#fields">领域</a>
+          <a href="#about">关于</a>
+          <a href="#contact">联系</a>
+          <a data-profile-href="email" href="mailto:1945343340@qq.com">邮件</a>
+        </nav>
+      </div>
+      <div class="footer-row">
+        <span>© 2026 <span data-profile="name">李贵平</span></span>
+        <span>作品集 2026 · 甘肃 天水</span>
+        <a href="#top">回到顶部 ↑</a>
+      </div>
     </div>
   </footer>
+
 
   <div class="project-view" id="project-view" role="dialog" aria-modal="true" aria-labelledby="pv-title" hidden>
     <div class="pv-bar">

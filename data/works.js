@@ -17,12 +17,13 @@ const image = (slug, n, alt, caption, kind = "render") => {
   };
 };
 
-window.CATEGORIES = ["景观", "室内", "视觉", "文创", "AIGC", "手绘", "模型"];
+window.CATEGORIES = ["景观", "室内", "视觉", "包装", "文创", "AIGC", "手绘", "模型"];
 
 window.CATEGORY_COLORS = {
   "景观": "#5f6649",
   "室内": "#7b5a3d",
   "视觉": "#7d4039",
+  "包装": "#7a5535",
   "文创": "#4f6470",
   "AIGC": "#5c4f3f",
   "手绘": "#6a6254",
@@ -157,7 +158,7 @@ window.WORKS = [
     tools: "AutoCAD · SketchUp · Lumion · Photoshop · Illustrator",
     summary: "用乡土植物与环形动线，把城市边角地做成可停留的疗愈公园。",
     description:
-      "项目位于兰州九洲开发区，以“山河之境·城市疗愈”为题，从气候、乡土植物、人群压力与场地高差入手，把环形跑道、中央草坪、儿童活动、互动水景与林下休憩串成一条连续回路。分析部分覆盖交通、气候、植物选型、功能分区与设计策略；效果图统一在晴天与高绿量里，强调日常真正用得上的停留方式。",
+      "项目位于兰州九洲开发区，以“山河之境·城市疗愈”为题，从气候、乡土植物、人群压力与场地高差入手，把环形跑道、中央草坪、儿童活动、互动水景与林下休憩串成一条连续回路。分析部分覆盖交通、气候、植物选型、功能分区与设计策略；效果图统一在晴天与高绿量里，强调日常真正用得上的停留方式。气候参数、降水与区位分析单独成图，最后用一张总展板把分析、策略与效果收在一起。",
     preview: [1, 8, 9, 10],
     images: [
       image("healing-park", 1, "兰州九洲疗愈公园鸟瞰图", "鸟瞰：公园嵌在城市街区里"),
@@ -172,7 +173,11 @@ window.WORKS = [
       image("healing-park", 10, "兰州九洲疗愈公园中央草坪效果图", "中央草坪：给城市留一块空地"),
       image("healing-park", 11, "兰州九洲疗愈公园设计分析图", "设计分析：区位、现状、总平与十二项专项", "board"),
       image("healing-park", 12, "兰州九洲疗愈公园节点效果汇总", "节点效果：草坪、水景、儿童活动与球场", "portrait"),
-      image("healing-park", 13, "兰州九洲疗愈公园作品集版面", "作品集版面：分析、策略与效果的总览", "portrait")
+      image("healing-park", 13, "兰州九洲疗愈公园作品集版面", "作品集版面：分析、策略与效果的总览", "portrait"),
+      image("healing-park", 14, "兰州九洲疗愈公园基本气候参数", "气候参数：温度、降水、风与日照", "board"),
+      image("healing-park", 15, "兰州九洲疗愈公园降水量表", "降水：全年分布与 7—9 月峰值", "board"),
+      image("healing-park", 16, "兰州九洲疗愈公园区位分析", "区位：从中国、甘肃到九州开发区", "board"),
+      image("healing-park", 17, "兰州九洲疗愈公园总展板", "总展板：从场地分析到节点效果", "portrait")
     ]
   },
 
@@ -217,85 +222,66 @@ window.WORKS = [
       image("warm-kitchen", 1, "暖木餐厨空间效果图", "餐厨一体：圆桌、木柜与走廊尽头的窗", "portrait")
     ]
   },
-
-  /* ---------- 视觉 ---------- */
   {
-    slug: "coffee-brand",
-    title: "半刻咖啡品牌与包装",
-    en: "BANKE Coffee",
-    category: "视觉",
+    slug: "office-space",
+    title: "办公空间设计",
+    en: "Office Space Design",
+    category: "室内",
     year: "2026",
     featured: true,
-    role: "标志设计 / 包装结构 / 场景呈现",
-    tools: "Illustrator · Photoshop · InDesign",
-    summary: "从标志、字体到挂耳盒与杯套的完整品牌触点。",
+    role: "平面规划 / 家具与灯光 / 效果表达",
+    tools: "AutoCAD · SketchUp · Enscape · Photoshop",
+    summary: "开放工位、会议与接待，串成一条清晰的工作动线。",
     description:
-      "以“半刻”作为品牌名，建立一套偏暖、偏静的咖啡视觉。标志把咖啡杯与时钟合并，包装用纸张、印章和手写感字体延续同一语气；从挂耳盒、豆罐到杯套，尽量让每个触点都说得同一种话。",
+      "以开放办公区为核心，沿窗布置工位，把会议、接待与茶水收进内侧；木色桌面、黑色钢构与绿植控制整体温度。三张效果图分别看开放办公、靠窗工位与会议接待，重点处理自然采光、桌面照度与视线遮挡。",
+    preview: [2, 1, 3],
     images: [
-      image("coffee-brand", 1, "半刻咖啡挂耳包装陈列", "挂耳咖啡系列陈列"),
-      image("coffee-brand", 2, "半刻咖啡罐装包装陈列", "罐装系列：把烘焙度做成色彩"),
-      image("coffee-brand", 3, "半刻咖啡杯套与标志", "杯套与标志：把时间折进杯身"),
-      image("coffee-brand", 4, "半刻咖啡纸盒结构", "纸盒结构：展开面与信息层级"),
-      image("coffee-brand", 5, "半刻咖啡组合陈列", "组合陈列：礼盒与单品的并置"),
-      image("coffee-brand", 6, "半刻咖啡三款挂耳盒产品图", "产品图：三款烘焙度并置"),
-      image("coffee-brand", 7, "半刻咖啡门店场景陈列", "门店场景：让包装回到吧台"),
-      image("coffee-brand", 8, "半刻咖啡三款挂耳袋正面", "三款正面：美式、拿铁与摩卡")
+      image("office-space", 1, "办公空间开放工位效果图", "开放工位：沿窗布置，保留自然采光"),
+      image("office-space", 2, "办公空间靠窗工位效果图", "靠窗工位：把绿意带进工作区"),
+      image("office-space", 3, "办公空间会议接待效果图", "会议接待：玻璃隔断保持通透")
     ]
   },
   {
-    slug: "rice-brand",
-    title: "雨禾村大米包装",
-    en: "Yuhecun Rice",
-    category: "视觉",
+    slug: "exhibition-space",
+    title: "民俗文化展陈空间",
+    en: "Folk Culture Exhibition Space",
+    category: "室内",
     year: "2026",
-    role: "标志设计 / 包装设计",
-    tools: "Illustrator · Photoshop · 3D 渲染",
-    summary: "用稻田、山形与米粒，建立区域大米的品牌表情。",
+    role: "展陈动线 / 展墙与展柜 / 灯光设计",
+    tools: "AutoCAD · SketchUp · Enscape · Photoshop",
+    summary: "把民俗器物放回一条可以慢慢读完的环形展线。",
     description:
-      "标志把稻穗、山形与村落收进一个圆形轮廓，包装以米白、草绿和木色为主，强调产地与新鲜感。设计尽量克制，让“米”本身成为画面的主角。",
+      "方案以“文脉相连”为题，用环形吊顶和中心展台组织参观动线，展墙依次排开非遗、民俗器物与图文资料；重点展品放在视线中心，展柜与展台用木色压低背景，灯光只照亮需要被读到的部分。三张效果图覆盖中心展台、展墙走廊与器物展区。",
+    preview: [1, 3, 2],
     images: [
-      image("rice-brand", 1, "雨禾村大米包装组合", "大米包装组合：米白、草绿与木色"),
-      image("rice-brand", 2, "雨禾村大米标志：稻田与山形", "雨禾村标志：稻田、山形与村落", "board"),
-      image("rice-brand", 3, "雨禾村大米标志应用", "标志应用：把产地收进圆形", "board")
+      image("exhibition-space", 1, "民俗文化展陈中心展台", "中心展台：红色狮头与环形吊顶"),
+      image("exhibition-space", 2, "民俗文化展陈展墙走廊", "展墙走廊：图文与器物交替"),
+      image("exhibition-space", 3, "民俗文化展陈器物展区", "器物展区：乐器与陶器陈列")
     ]
   },
   {
-    slug: "xihe-rice",
-    title: "溪禾大米包装",
-    en: "Xihe Rice Packaging",
-    category: "视觉",
-    year: "2026",
-    role: "包装系统 / 图形延展 / 场景呈现",
-    tools: "Illustrator · Photoshop · 3D 渲染",
-    summary: "三款米种，用黄、绿、白三种纸色分开，也把稻田收进同一套图形。",
+    slug: "interior-colorplans",
+    title: "室内彩平配色",
+    en: "Interior Color Plans",
+    category: "室内",
+    year: "2024",
+    role: "平面梳理 / 色彩方案 / 图面表达",
+    tools: "AutoCAD · Photoshop",
+    summary: "同一套户型，五套不同的彩平配色。",
     description:
-      "溪禾大米按米种建立三条色彩线：暖黄、草绿和米白。正面用米粒、稻穗与产地信息组成可缩放的网格，侧面留给规格与烹饪说明；五张场景图统一木质托盘、稻穗和散落米粒，让三款包装在货架上既能并排，也能单独站住。",
+      "以同一套住宅平面为底，分别尝试奶油蓝、暗色、莫兰迪黄绿、高对比跳色与低饱和马卡龙五套配色。每张图保留家具、地面与软装的材质层级，用颜色区分公共区、卧室与辅助空间，作为方案汇报时的氛围比对。",
+    preview: [3, 4, 1],
     images: [
-      image("xihe-rice", 1, "溪禾大米三款包装场景", "三款并排：黄、绿、白"),
-      image("xihe-rice", 2, "溪禾大米包装盒正面", "包装盒：米粒网格与产地信息"),
-      image("xihe-rice", 3, "溪禾大米立式袋包装", "立式袋：把稻穗做成大面积图形"),
-      image("xihe-rice", 4, "溪禾大米包装组合细节", "组合细节：纸张、提手与封口"),
-      image("xihe-rice", 5, "溪禾大米全系列陈列", "全系列：盒、袋与礼盒一起上架")
+      image("interior-colorplans", 1, "奶油蓝室内彩平", "奶油蓝：低饱和公共区", "board"),
+      image("interior-colorplans", 2, "暗黑风格室内彩平", "暗色：深色地面与重点家具", "board"),
+      image("interior-colorplans", 3, "莫兰迪黄绿室内彩平", "莫兰迪黄绿：柔和分区", "board"),
+      image("interior-colorplans", 4, "高级感跳色室内彩平", "跳色：用高饱和家具点出重心", "board"),
+      image("interior-colorplans", 5, "马卡龙低饱和室内彩平", "马卡龙：低饱和卧室与公共区", "board")
     ]
   },
-  {
-    slug: "pastry-packaging",
-    title: "桃酥包装",
-    en: "Peach Pastry Packaging",
-    category: "视觉",
-    year: "2026",
-    role: "包装设计 / 场景呈现",
-    tools: "Illustrator · Photoshop · 3D 渲染",
-    summary: "用暖色纸张与中式纹样，更新传统点心的货架形象。",
-    description:
-      "把桃酥的圆形、酥皮纹理和节庆感转成包装图形，兼顾单盒、组合装与手提袋的陈列效果。目标不是把传统做得更老，而是让它在货架上更容易被年轻人拿起来。",
-    images: [
-      image("pastry-packaging", 1, "桃酥包装设计组合", "桃酥包装：单盒与礼盒"),
-      image("pastry-packaging", 2, "桃酥包装单盒设计", "单盒：圆形与酥皮纹理"),
-      image("pastry-packaging", 3, "桃酥包装货架陈列", "货架陈列：组合装与手提袋")
-    ]
-  },
-  {
+
+  /* ---------- 视觉 ---------- */
+{
     slug: "logo-design",
     title: "品牌标志设计",
     en: "Brand Marks",
@@ -405,6 +391,95 @@ window.WORKS = [
     ]
   },
 
+  /* ---------- 包装 ---------- */
+  {
+    slug: "coffee-brand",
+    title: "半刻咖啡品牌与包装",
+    en: "BANKE Coffee",
+    category: "包装",
+    year: "2026",
+    featured: true,
+    role: "标志设计 / 包装结构 / 场景呈现",
+    tools: "Illustrator · Photoshop · InDesign",
+    summary: "从标志、字体到挂耳盒、杯套与展板的完整品牌触点。",
+    description:
+      "以“半刻”作为品牌名，建立一套偏暖、偏静的咖啡视觉。标志把咖啡杯与时钟合并，包装用纸张、印章和手写感字体延续同一语气；从挂耳盒、豆罐到杯套、展板与人物海报，尽量让每个触点都说得同一种话。",
+    preview: [1, 2, 8],
+    images: [
+      image("coffee-brand", 1, "半刻咖啡挂耳包装陈列", "挂耳咖啡系列陈列"),
+      image("coffee-brand", 2, "半刻咖啡罐装包装陈列", "罐装系列：把烘焙度做成色彩"),
+      image("coffee-brand", 3, "半刻咖啡杯套与标志", "杯套与标志：把时间折进杯身"),
+      image("coffee-brand", 4, "半刻咖啡纸盒结构", "纸盒结构：展开面与信息层级", "board"),
+      image("coffee-brand", 5, "半刻咖啡组合陈列", "组合陈列：礼盒与单品的并置"),
+      image("coffee-brand", 6, "半刻咖啡三款挂耳盒产品图", "产品图：三款烘焙度并置"),
+      image("coffee-brand", 7, "半刻咖啡门店场景陈列", "门店场景：让包装回到吧台"),
+      image("coffee-brand", 8, "半刻咖啡包装设计展板", "展板：从标志、包装到场景的总览", "board"),
+      image("coffee-brand", 9, "半刻咖啡人物海报", "人物海报：把包装放进生活场景", "portrait"),
+      image("coffee-brand", 10, "半刻咖啡场景海报", "场景海报：货架与咖啡罐的组合", "portrait")
+    ]
+  },
+
+  {
+    slug: "rice-brand",
+    title: "雨禾村大米包装",
+    en: "Yuhecun Rice",
+    category: "包装",
+    year: "2026",
+    role: "标志设计 / 包装设计",
+    tools: "Illustrator · Photoshop · 3D 渲染",
+    summary: "用稻田、山形与米粒，建立区域大米的品牌表情。",
+    description:
+      "标志把稻穗、山形与村落收进一个圆形轮廓，包装以米白、草绿和木色为主，强调产地与新鲜感。三款立式袋分别对应粳米、籼米与糯米，用同一套山水图形和不同底色区分米种；设计尽量克制，让“米”本身成为画面的主角。",
+    preview: [1, 2, 3],
+    images: [
+      image("rice-brand", 1, "雨禾村三款大米包装", "三款包装：粳米、籼米与糯米"),
+      image("rice-brand", 2, "雨禾村大米标志：稻田与山形", "雨禾村标志：稻田、山形与村落", "board"),
+      image("rice-brand", 3, "雨禾村大米标志应用", "标志应用：把产地收进圆形", "board")
+    ]
+  },
+
+  {
+    slug: "xihe-rice",
+    title: "溪禾大米包装",
+    en: "Xihe Rice Packaging",
+    category: "包装",
+    year: "2026",
+    role: "包装系统 / 图形延展 / 场景呈现",
+    tools: "Illustrator · Photoshop · 3D 渲染",
+    summary: "三款米种，用黄、绿、白三种纸色分开，也把稻田收进同一套图形。",
+    description:
+      "溪禾大米按米种建立三条色彩线：暖黄、草绿和米白。正面用米粒、稻穗与产地信息组成可缩放的网格，侧面留给规格与烹饪说明；五张场景图统一木质托盘、稻穗和散落米粒，让三款包装在货架上既能并排，也能单独站住。",
+    images: [
+      image("xihe-rice", 1, "溪禾大米三款包装场景", "三款并排：黄、绿、白"),
+      image("xihe-rice", 2, "溪禾大米包装盒正面", "包装盒：米粒网格与产地信息"),
+      image("xihe-rice", 3, "溪禾大米立式袋包装", "立式袋：把稻穗做成大面积图形"),
+      image("xihe-rice", 4, "溪禾大米包装组合细节", "组合细节：纸张、提手与封口"),
+      image("xihe-rice", 5, "溪禾大米全系列陈列", "全系列：盒、袋与礼盒一起上架")
+    ]
+  },
+
+  {
+    slug: "pastry-packaging",
+    title: "桃酥包装",
+    en: "Peach Pastry Packaging",
+    category: "包装",
+    year: "2026",
+    role: "包装设计 / 场景呈现",
+    tools: "Illustrator · Photoshop · 3D 渲染",
+    summary: "用暖色纸张与中式纹样，更新传统点心的货架形象。",
+    description:
+      "把桃酥的圆形、酥皮纹理和节庆感转成包装图形，兼顾单盒、开窗盒、翻盖盒与组合装的陈列效果。三款口味用可可、原味与无糖分开，标志把桃酥与麦穗围进同一枚印章；目标不是把传统做得更老，而是让它在货架上更容易被年轻人拿起来。",
+    preview: [1, 2, 3],
+    images: [
+      image("pastry-packaging", 1, "桃酥三款礼盒包装", "三款礼盒：可可、原味与无糖"),
+      image("pastry-packaging", 2, "桃酥开窗盒型陈列", "开窗盒型：三种口味的陈列"),
+      image("pastry-packaging", 3, "桃酥盒面设计", "盒面设计：圆形桃酥与中式纹样"),
+      image("pastry-packaging", 4, "桃酥翻盖盒结构", "翻盖盒结构：展开面与内衬", "board"),
+      image("pastry-packaging", 5, "原味桃酥产品与包装", "原味桃酥：产品与包装的关系"),
+      image("pastry-packaging", 6, "卓酥记品牌标志", "卓酥记标志：桃酥与麦穗", "board")
+    ]
+  },
+
   /* ---------- 文创 ---------- */
   {
     slug: "dunhuang-bookmark",
@@ -442,8 +517,7 @@ window.WORKS = [
     description:
       "以马踏飞燕为原型，保留三足腾空的动势，同时把青铜的硬边改成毛绒的圆润体块。展板呈现造型推演、配色与包装，尝试在“像文物”和“想抱一下”之间找到平衡。",
     images: [
-      image("horse-plush", 1, "马踏飞燕毛绒玩具展板", "马踏飞燕：造型推演、配色与包装", "board"),
-      image("horse-plush", 2, "马踏飞燕文创毛绒玩具展板", "文创展板：细节、三视图、包装与品牌吊牌", "board")
+      image("horse-plush", 1, "马踏飞燕文创毛绒玩具展板", "文创展板：造型推演、三视图、包装与品牌吊牌", "board")
     ]
   },
 
@@ -492,7 +566,6 @@ window.WORKS = [
     en: "AIGC Commercial Posters",
     category: "AIGC",
     year: "2026",
-    featured: true,
     role: "概念设定 / 提示词 / 版式合成",
     tools: "Midjourney · Photoshop",
     summary: "六组商业语气练习：耳机、护肤、美食、婚礼与运动。",
@@ -562,7 +635,8 @@ window.WORKS = [
       image("hand-drawing", 20, "建筑立面配色手绘", "建筑立面配色：四组马克笔推敲", "portrait"),
       image("hand-drawing", 21, "沙发与单椅色彩手绘", "沙发与单椅：五组色彩练习"),
       image("hand-drawing", 22, "灯具造型手绘", "灯具：吊灯、壁灯与落地灯"),
-      image("hand-drawing", 23, "庭院透视手绘", "庭院透视：廊架、台阶与树影", "portrait")
+      image("hand-drawing", 23, "庭院透视手绘", "庭院透视：廊架、台阶与树影", "portrait"),
+      image("hand-drawing", 24, "家具与座椅草图", "家具草图：桌、椅与凳的比例推敲", "portrait")
     ]
   },
   {
@@ -575,7 +649,7 @@ window.WORKS = [
     tools: "针管笔 · 马克笔 · 硫酸纸",
     summary: "用针管笔把构造、家具和亭子画到能落地。",
     description:
-      "一组以“画清楚”为目标的手绘练习：先用手绘把家具、座椅和六角亭的体块与尺度画准，再把铺装、景墙、座凳的构造大样画到能落地。线宽用来区分材料与结构，标注落在真实尺寸上。新增的景石座凳与弧形廊架大样，把石头、木格栅和混凝土基础放进同一张图里。相比效果图，这批图更关心连接方式、比例和标注，是方案能否落地的那一半。",
+      "一组以“画清楚”为目标的手绘练习：先用手绘把家具、座椅和六角亭的体块与尺度画准，再把铺装、景墙、座凳的构造大样画到能落地。线宽用来区分材料与结构，标注落在真实尺寸上。景石座凳、弧形廊架、树池与木构大样，把石头、木格栅和混凝土基础放进同一张图里。相比效果图，这批图更关心连接方式、比例和标注，是方案能否落地的那一半。",
     images: [
       image("drafting-details", 1, "家具透视手绘", "家具透视：床与沙发", "board"),
       image("drafting-details", 2, "铺装与景墙构造大样", "构造大样：铺装、景墙与座凳", "board"),
@@ -585,8 +659,32 @@ window.WORKS = [
       image("drafting-details", 6, "透视网格练习", "透视网格：用辅助线校正比例", "portrait"),
       image("drafting-details", 7, "座椅造型草图", "座椅草图：三视图与透视", "portrait"),
       image("drafting-details", 8, "家具与铺装样式手绘", "家具与铺装样式：桌面、座凳与景框", "portrait"),
-      image("drafting-details", 9, "景石座凳平立剖大样", "景石座凳：平面、立面与坐面收边", "board"),
-      image("drafting-details", 10, "弧形廊架平立剖大样", "弧形廊架：平面、剖面与柱础", "board")
+      image("drafting-details", 9, "弧形座凳平立剖大样", "弧形座凳：平面、立面与坐面收边", "board"),
+      image("drafting-details", 10, "乔木种植与树池剖面", "乔木种植：树池、土球与根系层次", "board"),
+      image("drafting-details", 11, "廊架与木构节点大样", "廊架节点：木梁、钢柱与基础", "board"),
+      image("drafting-details", 12, "树池与坐凳剖面大样", "树池坐凳：面层、种植土与混凝土", "board")
+    ]
+  },
+  {
+    slug: "cad-drafting",
+    title: "CAD 制图与节点",
+    en: "CAD Drafting Studies",
+    category: "手绘",
+    year: "2024",
+    role: "平立剖绘制 / 节点大样 / 图纸排版",
+    tools: "AutoCAD · Photoshop",
+    summary: "从家具、柜体到楼梯与餐厅立面的一套制图练习。",
+    description:
+      "课程制图练习，包含家具三视图、书柜立面、住宅平面、楼梯剖面、踏步大样与餐厅立面。图纸按统一线宽与标注层级整理，重点练习尺寸链、材料标注和节点放大，让方案能落到施工图的语言里。",
+    preview: [1, 2, 4],
+    images: [
+      image("cad-drafting", 1, "CAD 制图课程作业总览", "课程作业：四组图纸的总览", "board"),
+      image("cad-drafting", 2, "家具三视图", "家具三视图：尺寸与结构关系", "board"),
+      image("cad-drafting", 3, "书柜立面图", "书柜立面：分格与材料标注", "board"),
+      image("cad-drafting", 4, "住宅平面图", "住宅平面：墙体、家具与尺寸链", "board"),
+      image("cad-drafting", 5, "楼梯剖面图", "楼梯剖面：踏步与平台关系", "board"),
+      image("cad-drafting", 6, "踏步大样图", "踏步大样：面层与结构收口", "board"),
+      image("cad-drafting", 7, "餐厅立面图", "餐厅立面：柜体、灯具与标注", "board")
     ]
   },
 
@@ -610,7 +708,8 @@ window.WORKS = [
       image("shizilin-model", 5, "古典园林模型展陈现场", "展陈现场：模型与围观的人"),
       image("shizilin-model", 6, "古典园林模型制作过程", "制作过程：树、石与建筑的落位"),
       image("shizilin-model", 7, "古典园林模型组员协作", "协作：一起调整建筑与假山的位置"),
-      image("shizilin-model", 8, "古典园林模型拍摄现场", "拍摄现场：用手机记录模型细节")
+      image("shizilin-model", 8, "古典园林模型拍摄现场", "拍摄现场：用手机记录模型细节"),
+      image("shizilin-model", 9, "古典园林模型制作细节", "制作细节：调整假山与亭子的关系")
     ]
   },
   {
@@ -645,7 +744,8 @@ window.WORKS = [
     description:
       "把茶文化展厅拆成三个层次：外围的弧形隔断负责围合与导视，中间的环形茶席承担主要停留，四角的散座与展台补足观看和等候。模型用统一的木色和灰色地坪控制画面，让弧形墙、长桌、圆几与展台的高低关系一眼可读；俯拍角度也方便检查动线是否绕得通。",
     images: [
-      image("tea-showroom-model", 1, "茶文化展厅模型俯视", "俯视：环形茶席、弧形隔断与散座")
+      image("tea-showroom-model", 1, "茶文化展厅模型俯视", "俯视：环形茶席、弧形隔断与散座"),
+      image("tea-showroom-model", 2, "茶文化展厅模型整体", "整体：展厅、茶席与外围隔断")
     ]
   }
 ];

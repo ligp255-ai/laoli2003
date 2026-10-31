@@ -4,8 +4,8 @@ import shutil
 
 ROOT = Path(r"D:\桌面\作品集2003")
 OUT = ROOT / "assets" / "img" / "works"
-if OUT.exists():
-    shutil.rmtree(OUT)
+# 注意：作品源目录在 2026-10 之后有调整，本脚本保留用于早期 31 组图片的重建。
+# 新增或改版作品请用 prepare_work.py；运行前先核对 WORKS 中的路径。
 OUT.mkdir(parents=True, exist_ok=True)
 
 # slug -> ordered list of source files (relative to ROOT)

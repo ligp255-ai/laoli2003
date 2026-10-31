@@ -49,7 +49,7 @@ def main() -> int:
     parser.add_argument("--slug", required=True, help="英文短名，只用小写字母、数字和连字符，例如 campus-corner")
     parser.add_argument("--src", required=True, help="原始图片所在文件夹")
     parser.add_argument("--title", help="作品标题，例如 社区口袋公园（不填则生成后再改）")
-    parser.add_argument("--category", help="景观 / 室内 / 视觉 / 文创 / AIGC / 手绘")
+    parser.add_argument("--category", help="景观 / 室内 / 视觉 / 包装 / 文创 / AIGC / 手绘 / 模型")
     parser.add_argument("--year", default="2026", help="年份，例如 2026")
     parser.add_argument("--force", action="store_true", help="覆盖同名的已有图片")
     args = parser.parse_args()

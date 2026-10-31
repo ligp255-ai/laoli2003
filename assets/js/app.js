@@ -21,7 +21,6 @@
   const WORKS = Array.isArray(window.WORKS) ? window.WORKS : [];
   const CATEGORIES = Array.isArray(window.CATEGORIES) ? window.CATEGORIES : [];
   const COLORS = window.CATEGORY_COLORS || {};
-  const GALLERY_PICKS = Array.isArray(window.GALLERY_PICKS) ? window.GALLERY_PICKS : [];
 
   const bySlug = new Map(WORKS.map((work) => [work.slug, work]));
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -82,47 +81,79 @@
         .join("");
     }
 
-    const footer = $(".site-footer");
-    if (footer && PROFILE.nameEn) footer.dataset.wordmark = PROFILE.nameEn;
-
     document.title = `${PROFILE.name} · 设计作品集 2026`;
   }
 
-  /* ---------- featured works ---------- */
+  /* ---------- selected works ---------- */
 
-  function renderFeatured() {
-    const host = $("#featured-runs");
+  function cardImage(work) {
+    if (!work || !work.images || !work.images.length) return null;
+    const pick = Array.isArray(work.preview) && work.preview.length ? imageFor(work, work.preview[0]) : null;
+    return pick || work.images[0];
+  }
+
+  function renderSelected() {
+    const host = $("#selected-grid");
     if (!host) return;
 
-    const featured = WORKS.filter((work) => work.featured).slice(0, 6);
+    const flagship = bySlug.get("healing-park");
+    const picks = WORKS.filter((work) => work.featured && work !== flagship).slice(0, 5);
 
-    host.innerHTML = featured
+    host.innerHTML = picks
       .map((work) => {
-        const picks = Array.isArray(work.preview) ? work.preview : [];
-        const list = picks.length
-          ? picks.map((n) => work.images.find((item) => item.n === n)).filter(Boolean)
-          : work.images;
-        const frames = list
-          .slice(0, 4)
-          .map(
-            (image) =>
-              `<div class="run-frame"><img src="${esc(image.thumb)}" alt="" loading="lazy" decoding="async"></div>`
-          )
-          .join("");
-
+        const image = cardImage(work);
+        if (!image) return "";
         return `
-          <article class="run" data-reveal>
-            <a class="run-link" href="#/work/${esc(work.slug)}">
-              <div class="run-meta">
-                <h3>${esc(work.title)}</h3>
-                <p class="run-cat">${esc(work.category)} · ${esc(work.year)}</p>
-                <p class="run-summary">${esc(work.summary)}</p>
-              </div>
-              <div class="run-frames">${frames}</div>
-            </a>
-          </article>`;
+          <a class="work-card" href="#/work/${esc(work.slug)}">
+            <div class="card-media"><img src="${esc(image.thumb)}" alt="${esc(work.title)}" loading="lazy" decoding="async"></div>
+            <h3 class="card-title">${esc(work.title)}</h3>
+            <p class="card-meta">${esc(work.category)} · ${esc(work.year)}</p>
+          </a>`;
       })
       .join("");
+  }
+
+  /* ---------- featured project ---------- */
+
+  function renderFlagship() {
+    const host = $("#feature-layout");
+    if (!host) return;
+
+    const work = bySlug.get("healing-park") || WORKS.find((item) => item.featured) || WORKS[0];
+    if (!work || !work.images.length) return;
+
+    const big = cardImage(work) || work.images[0];
+    const thumbs = work.images.filter((image) => image !== big).slice(0, 4);
+
+    host.innerHTML = `
+      <div class="feature-media-col">
+        <figure class="feature-media">
+          <img src="${esc(big.src)}" alt="${esc(work.title)}：${esc(big.caption)}" loading="lazy" decoding="async">
+        </figure>
+        <div class="feature-thumbs">
+          ${thumbs
+            .map(
+              (image) => `
+            <a class="feature-thumb" href="#/work/${esc(work.slug)}" aria-label="${esc(
+                work.title
+              )}：${esc(image.caption)}">
+              <img src="${esc(image.thumb)}" alt="" loading="lazy" decoding="async">
+            </a>`
+            )
+            .join("")}
+        </div>
+      </div>
+      <div class="feature-body">
+        <h3 class="feature-title">${esc(work.title)}</h3>
+        <p class="feature-desc">${esc(work.summary)}</p>
+        <p class="feature-note">${esc(work.description)}</p>
+        <dl class="feature-facts">
+          <div><dt>年份</dt><dd>${esc(work.year)}</dd></div>
+          <div><dt>角色</dt><dd>${esc(work.role)}</dd></div>
+          <div><dt>工具</dt><dd>${esc(work.tools)}</dd></div>
+        </dl>
+        <a class="feature-link" href="#/work/${esc(work.slug)}">查看完整项目 <span aria-hidden="true">→</span></a>
+      </div>`;
   }
 
   /* ---------- index / filter ---------- */
@@ -141,8 +172,7 @@
             ? WORKS.length
             : WORKS.filter((work) => work.category === category).length;
         const pressed = category === activeCategory ? "true" : "false";
-        const dot = category === "全部" ? "" : ` style="--cat:${esc(COLORS[category] || "")}"`;
-        return `<button class="filter" type="button" data-cat="${esc(category)}" aria-pressed="${pressed}"${dot}>${esc(
+        return `<button class="filter" type="button" data-cat="${esc(category)}" aria-pressed="${pressed}">${esc(
           category
         )}<span class="count">${count}</span></button>`;
       })
@@ -151,23 +181,26 @@
     host.addEventListener("click", (event) => {
       const button = event.target.closest(".filter");
       if (!button) return;
-      setFilter(button.dataset.cat || "全部");
+      setFilter(button.dataset.cat || "全部", { animate: true });
     });
   }
 
-  function renderShelf() {
-    const host = $("#shelf");
+  function renderWorks() {
+    const host = $("#works-grid");
     if (!host) return;
 
     host.innerHTML = WORKS.map((work) => {
-      const color = COLORS[work.category] || "var(--surface-2)";
+      const image = cardImage(work);
+      if (!image) return "";
       return `
-        <a class="spine" href="#/work/${esc(work.slug)}" data-category="${esc(
-        work.category
-      )}" data-reveal style="--cat:${esc(color)}">
-          <span class="spine-title">${esc(work.title)}</span><span class="spine-gap" aria-hidden="true">　</span><span class="spine-cat" style="--cat:${esc(
-        color
-      )}">${esc(work.category)}</span>
+        <a class="work-tile" href="#/work/${esc(work.slug)}" data-category="${esc(work.category)}">
+          <div class="tile-media"><img src="${esc(image.thumb)}" alt="${esc(
+        work.title
+      )}" loading="lazy" decoding="async"></div>
+          <div class="tile-cap">
+            <h3 class="tile-title">${esc(work.title)}</h3>
+            <span class="tile-meta">${esc(work.category)}</span>
+          </div>
         </a>`;
     }).join("");
 
@@ -175,68 +208,66 @@
     if (count) count.textContent = `${WORKS.length} 个项目`;
   }
 
-  function setFilter(category) {
+  function initFields() {
+    const host = $("#fields-grid");
+    if (!host) return;
+
+    host.addEventListener("click", (event) => {
+      const field = event.target.closest(".field");
+      if (!field) return;
+      const category = field.dataset.cat || "全部";
+      setFilter(activeCategory === category ? "全部" : category, { scroll: true, animate: true });
+    });
+  }
+
+  function setFilter(category, { scroll = false, animate = false } = {}) {
     activeCategory = category;
 
     $$(".filter").forEach((button) => {
       button.setAttribute("aria-pressed", String(button.dataset.cat === category));
     });
 
-    let matchCount = 0;
-    $$(".spine").forEach((spine) => {
-      const match = category === "全部" || spine.dataset.category === category;
-      if (match) matchCount += 1;
-      spine.classList.toggle("is-match", category !== "全部" && match);
-      spine.classList.toggle("is-dim", category !== "全部" && !match);
+    $$(".field").forEach((field) => {
+      field.setAttribute("aria-pressed", String(field.dataset.cat === category));
     });
+
+    let matchCount = 0;
+    $$(".work-tile").forEach((tile) => {
+      const match = category === "全部" || tile.dataset.category === category;
+      tile.hidden = !match;
+      if (match) matchCount += 1;
+    });
+
+    const count = $("#index-count");
+    if (count) {
+      count.textContent =
+        category === "全部" ? `${WORKS.length} 个项目` : `${category} · ${matchCount} 个项目`;
+    }
 
     const status = $("#filter-status");
     if (status) {
       status.textContent =
         category === "全部"
           ? `显示全部 ${WORKS.length} 个项目。`
-          : `已聚焦${category}，共 ${matchCount} 个项目。其他项目仍然可以点击。`;
+          : `已筛选${category}，共 ${matchCount} 个项目。`;
     }
 
-    animateShelfFilter(category);
+    if (animate) animateWorksFilter();
+
+    if (scroll) {
+      const target = $("#index");
+      if (target) target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    }
   }
 
-  function animateShelfFilter(category) {
+  function animateWorksFilter() {
     if (!window.gsap || reduceMotion) return;
 
-    const spines = $$(".spine");
-    if (!spines.length) return;
-
-    window.gsap.to(spines, {
-      opacity: (index, spine) =>
-        category === "全部" || spine.classList.contains("is-match") ? 1 : 0.24,
-      x: (index, spine) => (category !== "全部" && spine.classList.contains("is-match") ? 3 : 0),
-      duration: 0.38,
-      ease: "power3.out",
-      stagger: { each: 0.006, from: "start" },
-      overwrite: "auto"
-    });
-  }
-
-  /* ---------- gallery ---------- */
-
-  function renderGallery() {
-    const host = $("#gallery-track");
-    if (!host) return;
-
-    const frames = GALLERY_PICKS.map((pick) => {
-      const work = bySlug.get(pick.slug);
-      const image = imageFor(work, pick.n);
-      if (!work || !image) return "";
-      return `
-        <a class="gframe" href="#/work/${esc(work.slug)}" data-reveal aria-label="${esc(
-        work.title
-      )}：${esc(image.caption)}">
-          <img src="${esc(image.thumb)}" alt="${esc(image.alt)}" loading="lazy" decoding="async">
-        </a>`;
-    }).join("");
-
-    host.innerHTML = frames;
+    window.gsap.fromTo(
+      $$(".work-tile").filter((tile) => !tile.hidden),
+      { y: 14, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.02, ease: "power3.out", overwrite: true }
+    );
   }
 
   /* ---------- project view ---------- */
@@ -393,7 +424,7 @@
     if (lastTrigger && document.contains(lastTrigger) && !view.contains(lastTrigger)) {
       lastTrigger.focus({ preventScroll: true });
     } else {
-      const fallback = $(".opening .btn");
+      const fallback = $(".opening-link");
       if (fallback) fallback.focus({ preventScroll: true });
     }
     lastTrigger = null;
@@ -473,19 +504,16 @@
 
     const timeline = window.gsap.timeline({ defaults: { ease: "power3.out" } });
     timeline
-      .from(".opening-bg img", { scale: 1.09, duration: 1.9, ease: "power2.out" }, 0)
-      .from(".opening-wordmark", { yPercent: 24, autoAlpha: 0, duration: 1.15 }, 0.12)
-      .from(".device", { y: 46, autoAlpha: 0, duration: 1.05 }, 0.28)
-      .from(
-        ".intro-id > *, .intro-lead, .intro-bio, .intro-facts > div, .intro-focus, .intro-tools, .intro-scope, .intro-actions, .intro-contact",
-        { y: 12, autoAlpha: 0, duration: 0.72, stagger: 0.035 },
-        0.52
-      )
-      .from(".opening-pill", { y: 22, autoAlpha: 0, duration: 0.85 }, 0.94)
-      .from(".opening-hint", { autoAlpha: 0, duration: 0.6 }, 1.16);
+      .from(".opening-art img", { scale: 1.07, duration: 1.8, ease: "power2.out" }, 0)
+      .from(".opening-orbit", { autoAlpha: 0, scale: 0.94, duration: 1.1 }, 0.18)
+      .from(".opening-display", { yPercent: 18, autoAlpha: 0, duration: 1.05 }, 0.08)
+      .from(".opening-sub, .opening-rule, .opening-statement", { y: 16, autoAlpha: 0, duration: 0.8, stagger: 0.07 }, 0.36)
+      .from(".opening-name, .opening-intro, .opening-facts, .opening-scope, .opening-actions", { y: 12, autoAlpha: 0, duration: 0.7, stagger: 0.04 }, 0.58)
+      .from(".opening-star", { autoAlpha: 0, scale: 0.4, duration: 0.6, stagger: 0.1, transformOrigin: "50% 50%" }, 0.7)
+      .from(".opening-scroll, .opening-meta", { autoAlpha: 0, duration: 0.6 }, 1.02);
 
-    window.gsap.to(".opening-bg img", {
-      yPercent: -4,
+    window.gsap.to(".opening-art img", {
+      yPercent: -3,
       ease: "none",
       scrollTrigger: {
         trigger: ".opening",
@@ -495,52 +523,136 @@
       }
     });
 
-    $$("[data-reveal]").forEach((element) => {
-      window.gsap.from(element, {
-        y: 24,
+    $$(".section, .fields").forEach((section) => {
+      const head = $(".section-head", section) || $(".fields-intro", section);
+      if (!head) return;
+      const targets = $$(".display, .fields-title, .head-en, .head-note, .head-link, .section-note", head);
+      if (!targets.length) return;
+
+      window.gsap.from(targets, {
+        y: 20,
         autoAlpha: 0,
-        duration: 0.8,
+        duration: 0.75,
+        stagger: 0.07,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: element,
-          start: "top 90%",
-          once: true
-        }
+        scrollTrigger: { trigger: section, start: "top 82%", once: true }
       });
     });
 
-    window.gsap.fromTo(
-      ".about-portrait img",
-      { scale: 1.08, yPercent: -2 },
-      {
-        scale: 1,
-        yPercent: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".about",
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1
+    ["#selected-grid .work-card", "#works-grid .work-tile", "#fields-grid .field"].forEach((selector) => {
+      window.ScrollTrigger.batch(selector, {
+        start: "top 92%",
+        once: true,
+        onEnter: (batch) =>
+          window.gsap.fromTo(
+            batch,
+            { y: 26, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: 0.7, stagger: 0.05, ease: "power3.out", overwrite: true }
+          )
+      });
+    });
+
+    window.gsap
+      .timeline({
+        scrollTrigger: { trigger: "#feature", start: "top 74%", once: true },
+        defaults: { ease: "power3.out" }
+      })
+      .from(".feature-media", { y: 26, autoAlpha: 0, duration: 0.9 })
+      .from(".feature-thumbs a", { y: 14, autoAlpha: 0, duration: 0.6, stagger: 0.06 }, 0.18)
+      .from(".feature-body > *", { y: 18, autoAlpha: 0, duration: 0.7, stagger: 0.06 }, 0.22);
+
+    window.gsap
+      .timeline({
+        scrollTrigger: { trigger: "#about", start: "top 74%", once: true },
+        defaults: { ease: "power3.out" }
+      })
+      .from(".about-main > *", { y: 20, autoAlpha: 0, duration: 0.75, stagger: 0.06 })
+      .from(".about-body > *", { y: 18, autoAlpha: 0, duration: 0.7, stagger: 0.05 }, 0.16);
+
+    window.gsap
+      .timeline({
+        scrollTrigger: { trigger: "#contact", start: "top 78%", once: true },
+        defaults: { ease: "power3.out" }
+      })
+      .from(".contact-main > *", { y: 18, autoAlpha: 0, duration: 0.7, stagger: 0.06 })
+      .from(".contact-media", { y: 24, autoAlpha: 0, duration: 0.9 }, 0.16);
+
+    [".feature-media img", ".contact-media img"].forEach((selector) => {
+      const image = $(selector);
+      if (!image) return;
+
+      window.gsap.fromTo(
+        image,
+        { yPercent: -3, scale: 1.05 },
+        {
+          yPercent: 3,
+          scale: 1.05,
+          ease: "none",
+          scrollTrigger: {
+            trigger: image.parentElement,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true
+          }
         }
-      }
-    );
+      );
+    });
   }
 
-  /* ---------- top bar ---------- */
+  /* ---------- theme ---------- */
 
-  function initTopbar() {
-    if (!topbar) return;
-    let shown = false;
+  const THEME_KEY = "lgp-theme";
 
-    const update = () => {
-      const shouldShow = window.scrollY > window.innerHeight * 0.6;
-      if (shouldShow === shown) return;
-      shown = shouldShow;
-      topbar.classList.toggle("is-visible", shouldShow);
-    };
+  function paintTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    const toggle = $("#theme-toggle");
+    if (toggle) {
+      toggle.setAttribute("aria-pressed", String(theme === "dark"));
+      toggle.setAttribute("aria-label", theme === "dark" ? "切换到浅色模式" : "切换到深色模式");
+      toggle.title = theme === "dark" ? "切换到浅色模式" : "切换深色模式";
+    }
+    const meta = $('meta[name="theme-color"]');
+    if (meta) meta.content = theme === "dark" ? "#0d0b09" : "#f6f5f1";
+  }
 
-    window.addEventListener("scroll", update, { passive: true });
-    update();
+  function initTheme() {
+    paintTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
+
+    const toggle = $("#theme-toggle");
+    if (!toggle) return;
+
+    toggle.addEventListener("click", () => {
+      const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+
+      try {
+        localStorage.setItem(THEME_KEY, next);
+      } catch (error) {}
+
+      if (document.startViewTransition && !reduceMotion) {
+        const rect = toggle.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+        const transition = document.startViewTransition(() => paintTheme(next));
+
+        transition.ready
+          .then(() => {
+            document.documentElement.animate(
+              { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+              {
+                duration: 640,
+                easing: "cubic-bezier(0.65, 0, 0.35, 1)",
+                pseudoElement: "::view-transition-new(root)"
+              }
+            );
+          })
+          .catch(() => {});
+      } else {
+        document.documentElement.classList.add("theme-anim");
+        paintTheme(next);
+        window.setTimeout(() => document.documentElement.classList.remove("theme-anim"), 700);
+      }
+    });
   }
 
   /* ---------- boot ---------- */
@@ -552,11 +664,12 @@
       const images = WORKS.reduce((sum, work) => sum + (work.images ? work.images.length : 0), 0);
       scope.textContent = `${WORKS.length} 个项目 · ${images} 张作品图 · ${CATEGORIES.length} 个类别`;
     }
-    renderFeatured();
+    renderSelected();
+    renderFlagship();
     renderFilters();
-    renderShelf();
-    renderGallery();
-    initTopbar();
+    renderWorks();
+    initFields();
+    initTheme();
     initProjectView();
     initMotion();
     route();

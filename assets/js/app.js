@@ -577,7 +577,7 @@
       .from(".contact-main > *", { y: 18, autoAlpha: 0, duration: 0.7, stagger: 0.06 })
       .from(".contact-media", { y: 24, autoAlpha: 0, duration: 0.9 }, 0.16);
 
-    [".feature-media img", ".contact-media img"].forEach((selector) => {
+    [".feature-media img"].forEach((selector) => {
       const image = $(selector);
       if (!image) return;
 

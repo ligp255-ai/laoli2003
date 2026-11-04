@@ -1121,7 +1121,7 @@ html[data-theme="dark"] .opening-art img {
 
 .contact-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  grid-template-columns: minmax(0, 1fr) clamp(240px, 30vw, 380px);
   gap: clamp(28px, 4vw, 72px);
   align-items: start;
 }
@@ -1175,11 +1175,15 @@ html[data-theme="dark"] .opening-art img {
 
 .contact-media {
   overflow: hidden;
-  aspect-ratio: 4 / 3;
+  justify-self: end;
+  width: 100%;
+  aspect-ratio: 855 / 1200;
   background: var(--light-2);
+  box-shadow: 0 0 0 1px var(--light-3);
 }
 
 .contact-media img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1601,7 +1605,9 @@ html[data-theme="dark"] .opening-art img {
   }
 
   .contact-media {
-    aspect-ratio: 16 / 10;
+    justify-self: start;
+    width: min(100%, 320px);
+    aspect-ratio: 855 / 1200;
   }
 
   .footer-main {

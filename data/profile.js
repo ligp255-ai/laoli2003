@@ -20,7 +20,7 @@ window.PROFILE = {
     { label: "空间", value: "AutoCAD · SketchUp · 3ds Max · Lumion · Enscape" },
     { label: "视觉", value: "Photoshop · Illustrator · InDesign" },
     { label: "手绘", value: "马克笔 · 空间透视 · 节点大样" },
-    { label: "AIGC", value: "ComfyUI · Midjourney · AI Agent" }
+    { label: "AIGC", value: "ComfyUI · Vibe Coding · AI Agent" }
   ],
   timeline: [
     { label: "教育", value: "兰州工商学院 · 环境设计 · 本科" },

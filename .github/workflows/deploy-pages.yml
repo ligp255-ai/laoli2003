@@ -32,7 +32,7 @@ jobs:
         run: |
           mkdir -p _site/assets
           cp index.html _site/
-          cp -R assets/css assets/js assets/img assets/favicon.svg assets/li-guiping-resume.pdf _site/assets/
+          cp -R assets/css assets/js assets/img assets/media assets/favicon.svg assets/li-guiping-resume.pdf _site/assets/
           cp -R data _site/
 
       - name: Upload site

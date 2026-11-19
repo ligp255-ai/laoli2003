@@ -231,8 +231,20 @@
       field.setAttribute("aria-pressed", String(field.dataset.cat === category));
     });
 
+    const tiles = $$(".work-tile");
+    const firstRects = new Map();
+    const canFlip = animate && window.gsap && !reduceMotion;
+
+    if (canFlip) {
+      tiles.forEach((tile) => {
+        if (tile.hidden) return;
+        firstRects.set(tile, tile.getBoundingClientRect());
+        window.gsap.killTweensOf(tile);
+      });
+    }
+
     let matchCount = 0;
-    $$(".work-tile").forEach((tile) => {
+    tiles.forEach((tile) => {
       const match = category === "全部" || tile.dataset.category === category;
       tile.hidden = !match;
       if (match) matchCount += 1;
@@ -252,7 +264,7 @@
           : `已筛选${category}，共 ${matchCount} 个项目。`;
     }
 
-    if (animate) animateWorksFilter();
+    if (animate) animateWorksFilter(firstRects);
 
     if (scroll) {
       const target = $("#index");
@@ -260,14 +272,57 @@
     }
   }
 
-  function animateWorksFilter() {
+  function animateWorksFilter(firstRects = new Map()) {
     if (!window.gsap || reduceMotion) return;
 
-    window.gsap.fromTo(
-      $$(".work-tile").filter((tile) => !tile.hidden),
-      { y: 14, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.02, ease: "power3.out", overwrite: true }
-    );
+    const entering = [];
+
+    $$(".work-tile").forEach((tile) => {
+      if (tile.hidden) return;
+
+      const first = firstRects.get(tile);
+      if (!first) {
+        entering.push(tile);
+        return;
+      }
+
+      const last = tile.getBoundingClientRect();
+      const x = first.left - last.left;
+      const y = first.top - last.top;
+      if (Math.abs(x) < 1 && Math.abs(y) < 1) {
+        window.gsap.set(tile, { clearProps: "transform" });
+        return;
+      }
+
+      window.gsap.fromTo(
+        tile,
+        { x, y },
+        {
+          x: 0,
+          y: 0,
+          duration: 0.45,
+          ease: "power3.out",
+          overwrite: true,
+          clearProps: "transform"
+        }
+      );
+    });
+
+    if (entering.length) {
+      window.gsap.fromTo(
+        entering,
+        { y: 18, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.4,
+          stagger: 0.03,
+          ease: "power3.out",
+          overwrite: true,
+          clearProps: "transform,opacity,visibility"
+        }
+      );
+    }
   }
 
   /* ---------- project view ---------- */
@@ -275,17 +330,30 @@
   const view = $("#project-view");
   const article = $("#pv-article");
   const closeButton = $("#pv-close");
+  const prevButton = $("#pv-prev");
+  const nextButton = $("#pv-next");
+  const pvBar = $(".pv-bar");
   const pvLabel = $(".pv-label");
+  const lightbox = $("#lightbox");
+  const lightboxImage = $("#lb-img");
+  const lightboxCaption = $("#lb-caption");
+  const lightboxCount = $("#lb-count");
+  const lightboxClose = $("#lb-close");
+  const lightboxPrev = $("#lb-prev");
+  const lightboxNext = $("#lb-next");
   const main = $("#main");
   const topbar = $("#topbar");
   const footer = $(".site-footer");
   const skip = $(".skip");
 
   let isOpen = false;
+  let currentWork = null;
   let lastTrigger = null;
   let lastTitle = document.title;
   let closeTween = null;
   let pvObserver = null;
+  let lightboxIndex = 0;
+  let lightboxTrigger = null;
 
   function clearProjectMotion() {
     if (pvObserver) {
@@ -323,20 +391,52 @@
   function renderProject(work) {
     if (!article) return;
     const index = WORKS.indexOf(work);
+    const prev = WORKS[(index - 1 + WORKS.length) % WORKS.length];
     const next = WORKS[(index + 1) % WORKS.length];
 
-    if (pvLabel) pvLabel.textContent = `${work.category} · ${work.year} · ${work.images.length} 张`;
+    const videoCount = work.images.filter((item) => item.video).length;
+    const photoCount = work.images.length - videoCount;
+    const mediaText = [photoCount ? `${photoCount} 张` : "", videoCount ? `${videoCount} 段影像` : ""]
+      .filter(Boolean)
+      .join(" · ");
+    if (pvLabel) pvLabel.textContent = `${work.category} · ${work.year} · ${mediaText}`;
+
+    if (prevButton) {
+      prevButton.disabled = WORKS.length < 2;
+      prevButton.setAttribute("aria-label", `上一个项目：${prev.title}`);
+    }
+
+    if (nextButton) {
+      nextButton.disabled = WORKS.length < 2;
+      nextButton.setAttribute("aria-label", `下一个项目：${next.title}`);
+    }
 
     const gallery = work.images
-      .map(
-        (image, imageIndex) => `
+      .map((image, imageIndex) => {
+        if (image.video) {
+          return `
+          <figure class="pv-figure pv-video" data-kind="render">
+            <video controls playsinline preload="metadata" poster="${esc(image.src)}" width="1920" height="1080" aria-label="${esc(
+            image.alt
+          )}">
+              <source src="${esc(image.video)}" type="video/mp4">
+              你的浏览器不支持视频播放，请下载后观看。
+            </video>
+            <figcaption>${esc(image.caption)}${image.duration ? ` · ${esc(image.duration)}` : ""}</figcaption>
+          </figure>`;
+        }
+        return `
           <figure class="pv-figure" data-kind="${esc(image.kind)}">
-            <img src="${esc(image.src)}" alt="${esc(image.alt)}" loading="${
+            <button class="pv-zoom" type="button" data-index="${imageIndex}" aria-label="查看大图：${esc(
+          image.caption
+        )}">
+              <img src="${esc(image.src)}" alt="${esc(image.alt)}" loading="${
           imageIndex === 0 ? "eager" : "lazy"
         }" decoding="async">
+            </button>
             <figcaption>${esc(image.caption)}</figcaption>
-          </figure>`
-      )
+          </figure>`;
+      })
       .join("");
 
     article.innerHTML = `
@@ -367,6 +467,10 @@
   function openProject(work) {
     if (!view || !work) return;
 
+    const wasOpen = isOpen;
+    if (lightbox && !lightbox.hidden) closeLightbox({ restoreFocus: false });
+    currentWork = work;
+
     if (!isOpen) {
       const current = document.activeElement;
       const isPageChrome = !current || current === document.body || current === document.documentElement;
@@ -387,7 +491,12 @@
     view.scrollTop = 0;
 
     document.title = `${work.title} · ${PROFILE.name} 作品集`;
-    if (closeButton) {
+    if (wasOpen) {
+      const active = document.activeElement;
+      const focusWasContent = !active || active === document.body || (article && article.contains(active));
+      if (focusWasContent && closeButton) closeButton.focus({ preventScroll: true });
+    }
+    if (closeButton && !wasOpen) {
       closeButton.focus({ preventScroll: true });
       // 背景设为 inert 后浏览器会把焦点收回 body，等这一帧结束再落一次焦点
       requestAnimationFrame(() => {
@@ -396,13 +505,26 @@
     }
 
     if (window.gsap && !reduceMotion) {
-      window.gsap.set(view, { opacity: 1 });
-      const timeline = window.gsap.timeline({ defaults: { ease: "power3.out" } });
-      timeline
-        .fromTo(view, { opacity: 0 }, { opacity: 1, duration: 0.26 }, 0)
-        .from(".pv-bar", { yPercent: -100, duration: 0.5 }, 0)
-        .from(article, { y: 22, autoAlpha: 0, duration: 0.6 }, 0.05)
-        .from($$(".pv-head > *", article), { y: 16, autoAlpha: 0, duration: 0.5, stagger: 0.055 }, 0.14);
+      if (wasOpen) {
+        window.gsap.fromTo(
+          article,
+          { y: 18, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.4, ease: "power3.out", overwrite: true }
+        );
+        window.gsap.fromTo(
+          $$(".pv-head > *", article),
+          { y: 10, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.3, stagger: 0.035, ease: "power3.out", overwrite: true }
+        );
+      } else {
+        window.gsap.set(view, { opacity: 1 });
+        const timeline = window.gsap.timeline({ defaults: { ease: "power3.out" } });
+        timeline
+          .fromTo(view, { opacity: 0 }, { opacity: 1, duration: 0.26 }, 0)
+          .from(".pv-bar", { yPercent: -100, duration: 0.5 }, 0)
+          .from(article, { y: 22, autoAlpha: 0, duration: 0.6 }, 0.05)
+          .from($$(".pv-head > *", article), { y: 16, autoAlpha: 0, duration: 0.5, stagger: 0.055 }, 0.14);
+      }
     }
 
     revealProjectGallery();
@@ -410,6 +532,8 @@
 
   function closeProject({ updateHash = true } = {}) {
     if (!isOpen || !view) return;
+
+    if (lightbox && !lightbox.hidden) closeLightbox({ restoreFocus: false });
 
     isOpen = false;
     document.body.classList.remove("is-locked");
@@ -428,6 +552,7 @@
       if (fallback) fallback.focus({ preventScroll: true });
     }
     lastTrigger = null;
+    currentWork = null;
 
     if (window.gsap && !reduceMotion) {
       closeTween = window.gsap.to(view, {
@@ -442,6 +567,150 @@
       });
     } else {
       view.hidden = true;
+    }
+  }
+
+  function stepProject(direction) {
+    if (!isOpen || !currentWork || WORKS.length < 2) return;
+
+    const index = WORKS.indexOf(currentWork);
+    if (index < 0) return;
+
+    const target = WORKS[(index + direction + WORKS.length) % WORKS.length];
+    if (!target || target === currentWork) return;
+
+    window.location.hash = `#/work/${target.slug}`;
+  }
+
+  function paintLightbox(direction = 0) {
+    if (!currentWork || !lightboxImage) return;
+
+    const total = currentWork.images.length;
+    const image = currentWork.images[lightboxIndex];
+    if (!image) return;
+
+    lightboxImage.src = image.src;
+    lightboxImage.alt = image.alt;
+    if (lightboxCaption) lightboxCaption.textContent = image.caption;
+    if (lightboxCount) {
+      const pad = (value) => String(value).padStart(2, "0");
+      lightboxCount.textContent = `${pad(lightboxIndex + 1)} / ${pad(total)}`;
+    }
+
+    if (lightboxPrev) lightboxPrev.disabled = total < 2;
+    if (lightboxNext) lightboxNext.disabled = total < 2;
+
+    if (window.gsap && !reduceMotion) {
+      window.gsap.fromTo(
+        lightboxImage,
+        { x: direction * 18, autoAlpha: 0 },
+        { x: 0, autoAlpha: 1, duration: 0.3, ease: "power2.out", overwrite: true }
+      );
+      window.gsap.fromTo(
+        [lightboxCaption, lightboxCount].filter(Boolean),
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.25, overwrite: true }
+      );
+    }
+
+    [lightboxIndex + 1, lightboxIndex - 1].forEach((index) => {
+      const neighbor = currentWork.images[(index + total) % total];
+      if (!neighbor || neighbor === image) return;
+      const preload = new Image();
+      preload.src = neighbor.src;
+    });
+  }
+
+  function openLightbox(index, trigger) {
+    if (!lightbox || !currentWork || !lightboxImage) return;
+
+    const image = currentWork.images[index];
+    if (!image) return;
+
+    lightboxIndex = index;
+    lightboxTrigger = trigger || null;
+    lightbox.hidden = false;
+    view.classList.add("lb-open");
+    if (article) article.inert = true;
+    if (pvBar) pvBar.inert = true;
+    paintLightbox();
+
+    if (window.gsap && !reduceMotion) {
+      window.gsap.fromTo(
+        lightbox,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.22, ease: "power2.out", overwrite: true }
+      );
+      const stage = $(".lb-stage", lightbox);
+      if (stage) {
+        window.gsap.fromTo(
+          stage,
+          { y: 18, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.35, ease: "power3.out", overwrite: true }
+        );
+      }
+    }
+
+    if (lightboxClose) lightboxClose.focus({ preventScroll: true });
+  }
+
+  function stepLightbox(direction) {
+    if (!lightbox || lightbox.hidden || !currentWork) return;
+
+    const total = currentWork.images.length;
+    if (total < 2) return;
+
+    lightboxIndex = (lightboxIndex + direction + total) % total;
+    paintLightbox(direction);
+  }
+
+  function closeLightbox({ restoreFocus = true } = {}) {
+    if (!lightbox || lightbox.hidden) return;
+
+    lightbox.hidden = true;
+    view.classList.remove("lb-open");
+    if (article) article.inert = false;
+    if (pvBar) pvBar.inert = false;
+
+    if (window.gsap) {
+      const targets = [lightbox, lightboxImage, lightboxCaption, lightboxCount].filter(Boolean);
+      window.gsap.killTweensOf(targets);
+      window.gsap.set(targets, { clearProps: "transform,opacity,visibility" });
+      const stage = $(".lb-stage", lightbox);
+      if (stage) window.gsap.set(stage, { clearProps: "transform,opacity,visibility" });
+    }
+
+    if (restoreFocus && lightboxTrigger && document.contains(lightboxTrigger)) {
+      lightboxTrigger.focus({ preventScroll: true });
+    }
+    lightboxTrigger = null;
+  }
+
+  function trapLightboxFocus(event) {
+    if (!lightbox) return;
+
+    const focusables = $$(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      lightbox
+    ).filter((element) => element.offsetParent !== null);
+
+    if (!focusables.length) return;
+
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+
+    if (!lightbox.contains(document.activeElement)) {
+      event.preventDefault();
+      first.focus();
+      return;
+    }
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
     }
   }
 
@@ -464,10 +733,65 @@
       closeButton.addEventListener("click", () => closeProject());
     }
 
+    if (prevButton) {
+      prevButton.addEventListener("click", () => stepProject(-1));
+    }
+
+    if (nextButton) {
+      nextButton.addEventListener("click", () => stepProject(1));
+    }
+
+    if (lightboxClose) {
+      lightboxClose.addEventListener("click", () => closeLightbox());
+    }
+
+    if (lightboxPrev) {
+      lightboxPrev.addEventListener("click", () => stepLightbox(-1));
+    }
+
+    if (lightboxNext) {
+      lightboxNext.addEventListener("click", () => stepLightbox(1));
+    }
+
+    if (lightboxImage) {
+      lightboxImage.addEventListener("click", () => closeLightbox());
+    }
+
+    if (lightbox) {
+      lightbox.addEventListener("click", (event) => {
+        if (event.target === lightbox) closeLightbox();
+      });
+    }
+
+    if (article) {
+      article.addEventListener("click", (event) => {
+        const trigger = event.target.closest(".pv-zoom");
+        if (!trigger || !currentWork) return;
+
+        const index = Number(trigger.dataset.index);
+        if (!Number.isInteger(index) || !currentWork.images[index]) return;
+        openLightbox(index, trigger);
+      });
+    }
+
     view.addEventListener("keydown", (event) => {
+      if (lightbox && !lightbox.hidden) return;
+
       if (event.key === "Escape") {
         event.preventDefault();
         closeProject();
+        return;
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        stepProject(1);
+        return;
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        stepProject(-1);
         return;
       }
 
@@ -492,7 +816,144 @@
       }
     });
 
+    document.addEventListener("keydown", (event) => {
+      if (!lightbox || lightbox.hidden) return;
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeLightbox();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        stepLightbox(1);
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        stepLightbox(-1);
+      } else if (event.key === "Tab") {
+        trapLightboxFocus(event);
+      }
+    });
+
     window.addEventListener("hashchange", route);
+  }
+
+  /* ---------- navigation chrome ---------- */
+
+  function initChrome() {
+    const bar = $("#scroll-progress");
+    const header = $("#topbar");
+    const links = new Map(
+      $$(".topbar-nav a")
+        .filter((link) => link.hash)
+        .map((link) => [link.hash.slice(1), link])
+    );
+    const sections = ["works", "fields", "feature", "index", "about", "contact"]
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+    const activeFor = {
+      works: "works",
+      fields: "fields",
+      feature: "works",
+      index: "works",
+      about: "about",
+      contact: "contact"
+    };
+    let active = "";
+    let queued = false;
+
+    const update = () => {
+      queued = false;
+      const scrollY = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+      const line = scrollY + Math.min(window.innerHeight * 0.32, 300);
+      let current = "";
+
+      sections.forEach((section) => {
+        if (section.offsetTop <= line) current = section.id;
+      });
+      if (window.innerHeight + scrollY >= document.documentElement.scrollHeight - 4) {
+        current = "contact";
+      }
+
+      if (bar) bar.style.transform = `scaleX(${progress})`;
+      if (header) header.classList.toggle("is-scrolled", scrollY > 8);
+
+      const next = activeFor[current] || "";
+      if (next === active) return;
+      active = next;
+      links.forEach((link, id) => {
+        if (id === active) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+    };
+
+    const request = () => {
+      if (queued) return;
+      queued = true;
+      window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", request, { passive: true });
+    window.addEventListener("resize", request);
+  }
+
+  function initHeroMotion() {
+    if (
+      !window.gsap ||
+      reduceMotion ||
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    ) {
+      return;
+    }
+
+    const opening = $(".opening");
+    if (!opening) return;
+
+    const art = $(".opening-art", opening);
+    const orbit = $(".opening-orbit", opening);
+    const stars = $$(".opening-star", opening);
+    if (!art) return;
+
+    const artX = window.gsap.quickTo(art, "x", { duration: 0.9, ease: "power3" });
+    const artY = window.gsap.quickTo(art, "y", { duration: 0.9, ease: "power3" });
+    const orbitX = orbit ? window.gsap.quickTo(orbit, "x", { duration: 1.1, ease: "power3" }) : null;
+    const orbitY = orbit ? window.gsap.quickTo(orbit, "y", { duration: 1.1, ease: "power3" }) : null;
+    const starTos = stars.map((star) => ({
+      x: window.gsap.quickTo(star, "x", { duration: 1.2, ease: "power3" }),
+      y: window.gsap.quickTo(star, "y", { duration: 1.2, ease: "power3" })
+    }));
+
+    const reset = () => {
+      artX(0);
+      artY(0);
+      if (orbitX) orbitX(0);
+      if (orbitY) orbitY(0);
+      starTos.forEach((star) => {
+        star.x(0);
+        star.y(0);
+      });
+    };
+
+    opening.addEventListener(
+      "pointermove",
+      (event) => {
+        const rect = opening.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        artX(x * 18);
+        artY(y * 14);
+        if (orbitX) orbitX(x * -10);
+        if (orbitY) orbitY(y * -8);
+        starTos.forEach((star, index) => {
+          const factor = 8 + index * 3;
+          star.x(x * factor);
+          star.y(y * factor);
+        });
+      },
+      { passive: true }
+    );
+    opening.addEventListener("pointerleave", reset, { passive: true });
   }
 
   /* ---------- motion ---------- */
@@ -547,7 +1008,15 @@
           window.gsap.fromTo(
             batch,
             { y: 26, autoAlpha: 0 },
-            { y: 0, autoAlpha: 1, duration: 0.7, stagger: 0.05, ease: "power3.out", overwrite: true }
+            {
+              y: 0,
+              autoAlpha: 1,
+              duration: 0.7,
+              stagger: 0.05,
+              ease: "power3.out",
+              overwrite: true,
+              clearProps: "transform"
+            }
           )
       });
     });
@@ -597,6 +1066,33 @@
         }
       );
     });
+
+    window.gsap.to(".opening-star", {
+      autoAlpha: 0.35,
+      scale: 0.82,
+      duration: 1.7,
+      delay: 1.8,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+      stagger: { each: 0.55, from: "random" },
+      transformOrigin: "50% 50%"
+    });
+
+    window.gsap.to(".opening-orbit", {
+      rotate: -10,
+      duration: 16,
+      delay: 1.6,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
+
+    window.gsap.fromTo(
+      ".opening-scroll-line",
+      { scaleY: 0.35, transformOrigin: "50% 0%" },
+      { scaleY: 1, duration: 1.4, repeat: -1, yoyo: true, ease: "sine.inOut" }
+    );
   }
 
   /* ---------- theme ---------- */
@@ -662,13 +1158,21 @@
     const scope = $("#intro-scope");
     if (scope && WORKS.length) {
       const images = WORKS.reduce((sum, work) => sum + (work.images ? work.images.length : 0), 0);
-      scope.textContent = `${WORKS.length} 个项目 · ${images} 张作品图 · ${CATEGORIES.length} 个类别`;
+      const videos = WORKS.reduce(
+        (sum, work) => sum + (work.images ? work.images.filter((item) => item.video).length : 0),
+        0
+      );
+      scope.textContent = `${WORKS.length} 个项目 · ${images - videos} 张作品图${
+        videos ? ` · ${videos} 段影像` : ""
+      } · ${CATEGORIES.length} 个类别`;
     }
     renderSelected();
     renderFlagship();
     renderFilters();
     renderWorks();
     initFields();
+    initChrome();
+    initHeroMotion();
     initTheme();
     initProjectView();
     initMotion();

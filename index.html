@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>李贵平 · 设计作品集 2026</title>
-  <meta name="description" content="李贵平，环境设计 2026 届。景观、室内、视觉、包装、文创、AIGC、手绘与模型作品集，共 35 个项目。">
+  <meta name="description" content="李贵平，环境设计 2026 届。景观、室内、视觉、包装、文创、AIGC、手绘与模型作品集，共 38 个项目。">
   <meta name="theme-color" content="#f6f5f1">
   <script>
     try {
@@ -14,7 +14,7 @@
   </script>
   <meta property="og:type" content="website">
   <meta property="og:title" content="李贵平 · 设计作品集 2026">
-  <meta property="og:description" content="环境设计 2026 届。景观、室内、视觉、包装、文创、AIGC、手绘与模型，共 35 个项目。">
+  <meta property="og:description" content="环境设计 2026 届。景观、室内、视觉、包装、文创、AIGC、手绘与模型，共 38 个项目。">
   <meta property="og:image" content="assets/img/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -50,6 +50,7 @@
         </svg>
       </button>
     </nav>
+    <span class="scroll-progress" id="scroll-progress" aria-hidden="true"></span>
   </header>
 
   <main id="main">
@@ -81,7 +82,7 @@
             <span aria-hidden="true">/</span>
             <span data-profile="availability">可随时到岗</span>
           </p>
-          <p class="opening-scope" id="intro-scope">35 个项目 · 194 张作品图 · 8 个类别</p>
+          <p class="opening-scope" id="intro-scope">38 个项目 · 204 张作品图 · 2 段影像 · 8 个类别</p>
           <div class="opening-actions">
             <a class="opening-link" href="#works">查看作品 <span aria-hidden="true">→</span></a>
             <a class="opening-link opening-link-2" data-profile-href="resume" href="assets/li-guiping-resume.pdf" download>简历 PDF</a>
@@ -90,7 +91,7 @@
 
         <div class="opening-meta" aria-hidden="true">
           <span class="opening-meta-brand">LIGUIPING</span>
-          <span class="opening-meta-year">2026 ——</span>
+          <span class="opening-meta-year">2026</span>
         </div>
       </div>
 
@@ -111,7 +112,7 @@
             <h2 class="display" id="works-title">精选作品</h2>
             <p class="head-en">Selected works</p>
           </div>
-          <a class="head-link" href="#index">全部 35 个项目 <span aria-hidden="true">→</span></a>
+          <a class="head-link" href="#index">全部 38 个项目 <span aria-hidden="true">→</span></a>
         </div>
         <div class="selected-grid" id="selected-grid"></div>
       </div>
@@ -215,7 +216,7 @@
             <h2 class="display" id="index-title">全部作品</h2>
             <p class="head-en">All works</p>
           </div>
-          <p class="section-note" id="index-count">35 个项目</p>
+          <p class="section-note" id="index-count">38 个项目</p>
         </div>
         <div class="filters" id="filters" role="group" aria-label="按方向筛选作品"></div>
         <div class="works-grid" id="works-grid"></div>
@@ -286,12 +287,31 @@
   </footer>
 
 
-  <div class="project-view" id="project-view" role="dialog" aria-modal="true" aria-labelledby="pv-title" hidden>
+  <div class="project-view" id="project-view" role="dialog" aria-modal="true" aria-labelledby="pv-title" aria-keyshortcuts="ArrowLeft ArrowRight Escape" hidden>
     <div class="pv-bar">
       <span class="pv-label">作品 / 2026</span>
-      <button class="pv-close" id="pv-close" type="button" aria-label="关闭项目">关闭</button>
+      <div class="pv-tools">
+        <div class="pv-pager" role="group" aria-label="切换项目">
+          <button class="pv-step" id="pv-prev" type="button" aria-label="上一个项目">←</button>
+          <button class="pv-step" id="pv-next" type="button" aria-label="下一个项目">→</button>
+        </div>
+        <button class="pv-close" id="pv-close" type="button" aria-label="关闭项目">关闭</button>
+      </div>
     </div>
     <article class="pv-article" id="pv-article" tabindex="-1"></article>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="作品大图" aria-keyshortcuts="ArrowLeft ArrowRight Escape" hidden>
+      <div class="lb-bar">
+        <span class="lb-count" id="lb-count" aria-live="polite"></span>
+        <button class="lb-close" id="lb-close" type="button" aria-label="关闭大图">关闭</button>
+      </div>
+      <button class="lb-nav lb-prev" id="lb-prev" type="button" aria-label="上一张">←</button>
+      <figure class="lb-stage">
+        <img id="lb-img" alt="">
+        <figcaption id="lb-caption"></figcaption>
+      </figure>
+      <button class="lb-nav lb-next" id="lb-next" type="button" aria-label="下一张">→</button>
+    </div>
   </div>
 </body>
 </html>

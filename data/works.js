@@ -17,6 +17,13 @@ const image = (slug, n, alt, caption, kind = "render") => {
   };
 };
 
+/* 视频作品：01.jpg 作为封面与列表缩略图，video 指向 assets/media/ 下的 MP4 */
+const video = (slug, n, alt, caption, src, duration) => ({
+  ...image(slug, n, alt, caption, "render"),
+  video: src,
+  duration
+});
+
 window.CATEGORIES = ["景观", "室内", "视觉", "包装", "文创", "AIGC", "手绘", "模型"];
 
 window.CATEGORY_COLORS = {
@@ -114,11 +121,11 @@ window.WORKS = [
     en: "Red Culture Plaza",
     category: "景观",
     year: "2025",
-    role: "纪念性空间 / 铺装与雕塑 / 效果表达",
+    role: "纪念性空间 / 铺装与雕塑 / 分析与效果表达",
     tools: "SketchUp · Lumion · Photoshop",
     summary: "用纪念性构筑与铺装，组织进入广场的仪式路径。",
     description:
-      "把纪念石、人物剪影、文化长廊和红色展墙放在同一条轴线上，形成从城市界面到广场核心的渐进体验。效果图重点表达人群尺度、光影和材料质感，让纪念性不靠体量压人，而靠路径慢慢展开。",
+      "把纪念石、人物剪影、文化长廊和红色展墙放在同一条轴线上，形成从城市界面到广场核心的渐进体验。效果图重点表达人群尺度、光影和材料质感，让纪念性不靠体量压人，而靠路径慢慢展开。补充的交通分析、功能分区与道路分析，把入口、游线、滨水节点和停留空间的关系讲清楚；总览展板则把区位、设计说明、人群与植物分析收进一张图。",
     images: [
       image("red-culture-plaza", 1, "红色文化广场主景效果图", "广场主景：雕塑、花坛与人群"),
       image("red-culture-plaza", 2, "红色文化广场人物剪影雕塑效果图", "人物剪影：把纪念性放进日常"),
@@ -126,8 +133,12 @@ window.WORKS = [
       image("red-culture-plaza", 4, "红色文化广场纪念石细部效果图", "纪念石：六边形徽记与铭文"),
       image("red-culture-plaza", 5, "红色文化广场红色构筑效果图", "红色构筑：把人物放进场景"),
       image("red-culture-plaza", 6, "红色文化广场红色展墙效果图", "红色展墙：入口立面的节奏"),
-      image("red-culture-plaza", 7, "红色文化广场鸟瞰效果图", "鸟瞰：广场、水系与周边绿地"),
-      image("red-culture-plaza", 8, "红色文化广场课程研报", "课程研报：从区位、说明到植物配置", "board")
+      image("red-culture-plaza", 7, "红色文化广场鸟瞰效果图", "鸟瞰：暖光下的广场、水系与周边绿地"),
+      image("red-culture-plaza", 8, "红色文化广场暖光鸟瞰效果图", "暖光鸟瞰：广场与滨水界面的整体关系"),
+      image("red-culture-plaza", 9, "红色文化广场交通分析图", "交通分析：主次入口、步行游线与滨水节点", "board"),
+      image("red-culture-plaza", 10, "红色文化广场功能分区与道路分析图", "功能分区与道路分析：从区域划分到三级游线", "board"),
+      image("red-culture-plaza", 11, "红色文化广场项目总览展板", "项目总览：区位、设计说明、人群与植物分析", "board"),
+      image("red-culture-plaza", 12, "红色文化广场课程研报", "课程研报：从区位、说明到植物配置", "board")
     ]
   },
   {
@@ -530,7 +541,7 @@ window.WORKS = [
     year: "2026",
     featured: true,
     role: "概念设定 / AIGC 生成 / 后期统一",
-    tools: "Midjourney · ComfyUI · Photoshop",
+    tools: "ComfyUI · Vibe Coding · Photoshop",
     summary: "从封神到赵飞燕，两组东方美妆概念视觉。",
     description:
       "以神话人物、青铜器、香炉和织物为线索，为口红与香水建立两组不同的东方叙事。AIGC 负责概念图与氛围，后期统一光线、材质和版式，让五张图像同一个品牌的不同章节。",
@@ -549,7 +560,7 @@ window.WORKS = [
     category: "AIGC",
     year: "2026",
     role: "概念设定 / AIGC 生成 / 系列统一",
-    tools: "Midjourney · ComfyUI · Photoshop",
+    tools: "ComfyUI · Vibe Coding · Photoshop",
     summary: "把工作台、手稿与日常物件，编进四种创作者的工作状态。",
     description:
       "用 AIGC 生成一组创作者形象插画，把桌面、纸张、植物和屏幕作为叙事道具。四张图分别对应空间设计、花艺、亲子创作和手绘练习，保持同一套暖色与光线，形成可以继续扩展的系列，也用来练习如何把提示词变成稳定的视觉语言。",
@@ -567,17 +578,19 @@ window.WORKS = [
     category: "AIGC",
     year: "2026",
     role: "概念设定 / 提示词 / 版式合成",
-    tools: "Midjourney · Photoshop",
-    summary: "六组商业语气练习：耳机、护肤、美食、婚礼与运动。",
+    tools: "ComfyUI · Vibe Coding · Photoshop",
+    summary: "八组商业语气练习：耳机、护肤、美食、婚礼、运动与吹风机。",
     description:
-      "用同一套工作流处理不同品类：先用提示词锁定光线、材质和镜头，再在 Photoshop 里补上标题、参数和品牌语气。BOLT 用冷灰和白色产品压住人物，Glossier 用粉色拼贴保留“真实皮肤”，三张美食海报统一在悬浮构图里；婚礼与跑者两张把电影感光线和插画线条放进同一组练习。",
+      "用同一套工作流处理不同品类：先用提示词锁定光线、材质和镜头，再在 Photoshop 里补上标题、参数和品牌语气。BOLT 用冷灰和白色产品压住人物，Glossier 用粉色拼贴保留“真实皮肤”，三张美食海报统一在悬浮构图里；婚礼与跑者两张把电影感光线和插画线条放进同一组练习，SHARP 吹风机则用暖米色、丝绸和石材把产品放回浴室之外的静物场景。",
     images: [
       image("aigc-commercial", 1, "BOLT 无线耳机广告", "BOLT：把声音做成轻盈的光", "portrait"),
       image("aigc-commercial", 2, "Glossier 护肤拼贴广告", "Glossier：粉色拼贴与真实皮肤", "portrait"),
       image("aigc-commercial", 3, "三联浮空美食海报", "浮空美食：三种口味的垂直构图", "portrait"),
       image("aigc-commercial", 4, "电影感红花婚礼三联画", "婚礼三联画：红花与低光", "portrait"),
       image("aigc-commercial", 5, "涂鸦跑者运动海报", "跑者：插画线条拉住实拍人物", "portrait"),
-      image("aigc-commercial", 6, "DEFY GRAVITY 汉堡广告", "DEFY GRAVITY：让汉堡离开桌面", "portrait")
+      image("aigc-commercial", 6, "DEFY GRAVITY 汉堡广告", "DEFY GRAVITY：让汉堡离开桌面", "portrait"),
+      image("aigc-commercial", 7, "SHARP 智柔智能吹风机海报", "智柔：恒温、负离子与低噪卖点", "portrait"),
+      image("aigc-commercial", 8, "SHARP 智柔智能吹风机横版海报", "横版：大风量、轻量与安全设计", "render")
     ]
   },
   {
@@ -587,7 +600,7 @@ window.WORKS = [
     category: "AIGC",
     year: "2026",
     role: "IP 设定 / AIGC 生成 / 产品与空间延展",
-    tools: "Midjourney · ComfyUI · Photoshop",
+    tools: "ComfyUI · Vibe Coding · Photoshop",
     summary: "从一组圆形 IP 冰箱贴，长成一面可以逛的主题墙。",
     description:
       "先以身边的人物、动物、花和相机为原型，生成两组圆形冰箱贴：一组是“李小满”的卡通日常，一组是“老李”的热爱创造。每个徽章都保留厚珐琅的高光和金属包边，让它们像真的能吸在冰箱上；再把图案放大、拆散，铺进零售空间的黄色主题墙，完成从产品到空间的一次延展。",
@@ -597,6 +610,38 @@ window.WORKS = [
       image("fridge-magnets", 3, "AIGC IP 主题墙与零售空间", "主题墙：把徽章放大成一整面黄色"),
       image("fridge-magnets", 4, "AIGC IP 主题墙陈列", "陈列：产品、画框与货架"),
       image("fridge-magnets", 5, "AIGC IP 主题墙细节", "细节：浮雕、珐琅与手作痕迹", "portrait")
+    ]
+  },
+  {
+    slug: "shadow-puppet",
+    title: "皮影戏非遗传承",
+    en: "Shadow Puppetry",
+    category: "AIGC",
+    year: "2026",
+    role: "脚本 / AIGC 影像 / 剪辑与声音",
+    tools: "ComfyUI · AI 视频 · 剪辑",
+    summary: "用一段 40 秒的影像，把老艺人、皮影和看戏的人串成一次传承。",
+    description:
+      "从老艺人在灯下操纵皮影，到祖孙俩在幕前看戏，再到满墙皮影的收束，用 AIGC 生成连续的镜头与光线，再通过剪辑和声音把节奏放慢。画面刻意保留手部、皱纹和幕布的质感，让技术退到故事后面，先让人物和这门手艺被看见。",
+    images: [
+      video("shadow-puppet", 1, "皮影戏非遗传承影像封面", "影像封面：老艺人与皮影", "assets/media/shadow-puppet.mp4", "00:40"),
+      image("shadow-puppet", 2, "皮影戏祖孙看戏画面", "看戏：祖孙俩在幕前", "render")
+    ]
+  },
+  {
+    slug: "savoye-animation",
+    title: "萨伏伊别墅拆解动画",
+    en: "Villa Savoye Exploded Animation",
+    category: "AIGC",
+    year: "2026",
+    role: "建筑建模 / 拆解动画 / 渲染",
+    tools: "SketchUp · AIGC · 剪辑",
+    summary: "用 10 秒的拆解动画，把萨伏伊别墅的体量、楼板与曲面墙一层层打开。",
+    description:
+      "先把萨伏伊别墅的体量、底层架空、坡道与屋顶花园拆成独立构件，再让楼板、墙体和曲面体块在镜头里依次升起、错位。动画保持灰白材质和柔和天光，把注意力留给结构关系；从完整建筑到构件悬浮，再回到场地，10 秒内完成一次对现代主义经典的阅读。",
+    images: [
+      video("savoye-animation", 1, "萨伏伊别墅拆解动画封面", "拆解：楼板、墙体与曲面体块", "assets/media/savoye-animation.mp4", "00:10"),
+      image("savoye-animation", 2, "萨伏伊别墅场地鸟瞰", "场地：建筑与树林的关系", "render")
     ]
   },
 
@@ -709,7 +754,23 @@ window.WORKS = [
       image("shizilin-model", 6, "古典园林模型制作过程", "制作过程：树、石与建筑的落位"),
       image("shizilin-model", 7, "古典园林模型组员协作", "协作：一起调整建筑与假山的位置"),
       image("shizilin-model", 8, "古典园林模型拍摄现场", "拍摄现场：用手机记录模型细节"),
-      image("shizilin-model", 9, "古典园林模型制作细节", "制作细节：调整假山与亭子的关系")
+      image("shizilin-model", 9, "古典园林模型制作细节", "制作细节：调整假山与亭子的关系"),
+      image("shizilin-model", 10, "狮子林模型制作展板", "展板：园林概况、平面、节点与制作过程", "board")
+    ]
+  },
+  {
+    slug: "suzhou-museum-model",
+    title: "苏州博物馆建筑与环境模型",
+    en: "Suzhou Museum Model",
+    category: "模型",
+    year: "2024",
+    role: "模型制作 / 图纸深化 / 展板编排",
+    tools: "CAD · 木板 · 卡纸 · 模型树",
+    summary: "以苏州博物馆为对象，把白墙、深灰屋面与水院收进一座实体模型。",
+    description:
+      "以苏州博物馆的院落、连廊和水院为线索，先用 CAD 平面定位建筑轮廓与铺装边界，再按比例切板、搭建墙体和坡屋面。模型用白墙与深灰屋面拉开体量，中央水面、片石与植物补足园林层次；展板把设计说明、平面、制作过程和细节收进一张图，保留从图纸到实体的完整推演。",
+    images: [
+      image("suzhou-museum-model", 1, "苏州博物馆建筑与环境模型展板", "展板：设计说明、平面、制作过程与细节", "board")
     ]
   },
   {
